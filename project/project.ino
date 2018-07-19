@@ -121,7 +121,7 @@ void loop() {
     Serial.println();
     */
     Serial.println(F("Detected Card!"));
-
+    authentication();
     String readstr;
     while (!Serial.available()) {}
     
@@ -133,9 +133,23 @@ void loop() {
         }
     }
 
+
     if (readstr.length() > 0) {
         Serial.print(F("Arduino recieved: "));
         Serial.println(readstr);
+        Serial.println(readstr.length());
+        
+        if(readstr[0]=='w' && readstr.length() == 21){ //command(1)+' '+index(2)+' '+data(16)
+          byte blockIndex;
+          blockIndex = 10*(readstr[2]-'0')+(readstr[3]-'0');
+          write_block_data(blockIndex, &readstr[5], 16);
+        }else if(readstr[0]=='r' && readstr.length() == 4){ //command(1) index(2)
+          byte blockIndex;
+          blockIndex = 10*(readstr[2]-'0')+(readstr[3]-'0');
+          read_block_data(blockIndex, databuffer, datasize);
+          Serial.print(F("read block ")); Serial.print(blockIndex); Serial.println(F(": "));
+          dump_byte_array(databuffer, 16); Serial.println();
+        }
     }
     
     // Halt PICC
@@ -184,13 +198,13 @@ void read_block_data(byte blockAddr, byte* databuffer, byte datasize) {
     }
 }
 
-void write_block_data(byte blockAddr, byte* databuffer, byte datasize) {
+void write_block_data(byte blockAddr, byte* _databuffer, byte datasize) {
     Serial.print(F("Writing data into block ")); Serial.print(blockAddr);
     Serial.println(F(" ..."));
 
     MFRC522::StatusCode status;
 
-    status = (MFRC522::StatusCode) mfrc522.MIFARE_Write(blockAddr, databuffer, 16);
+    status = (MFRC522::StatusCode) mfrc522.MIFARE_Write(blockAddr, _databuffer, 16);
     if (status != MFRC522::STATUS_OK) {
         Serial.print(F("MIFARE_Write() failed: "));
         Serial.println(mfrc522.GetStatusCodeName(status));
