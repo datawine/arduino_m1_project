@@ -10,8 +10,6 @@
  * This sample shows how to read and write data blocks on a MIFARE Classic PICC
  * (= card/tag).
  *
- * BEWARE: Data will be written to the PICC, in sector #1 (blocks #4 to #7).
- *
  *
  * Typical pin layout used:
  * -----------------------------------------------------------------------------------------
@@ -64,13 +62,14 @@ void setup() {
         key.keyByte[i] = 0xFF;
     }
 
-    print_basic_info();
+//    print_basic_info();
 }
 
 /**
  * Main loop.
  */
 void loop() {
+
     // Look for new cards
     if ( ! mfrc522.PICC_IsNewCardPresent())
         return;
@@ -79,6 +78,7 @@ void loop() {
     if ( ! mfrc522.PICC_ReadCardSerial())
         return;
 
+    /*
     // Show some details of the PICC (that is: the tag/card)
     Serial.print(F("Card UID:"));
     dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
@@ -119,11 +119,30 @@ void loop() {
     Serial.println(F("Current data in sector:"));
     mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key, sector);
     Serial.println();
+    */
+    Serial.println(F("Detected Card!"));
 
+    String readstr;
+    while (!Serial.available()) {}
+    
+    while (Serial.available()) {
+        delay(30);
+        if (Serial.available() > 0) {
+            char c = Serial.read();
+            readstr += c;
+        }
+    }
+
+    if (readstr.length() > 0) {
+        Serial.print(F("Arduino recieved: "));
+        Serial.println(readstr);
+    }
+    
     // Halt PICC
     mfrc522.PICC_HaltA();
     // Stop encryption on PCD
     mfrc522.PCD_StopCrypto1();
+    
 }
 
 byte trans_char_byte(byte *databuffer, char *s, byte start) {
