@@ -38,9 +38,9 @@ MFRC522::MIFARE_Key key;
 
 const byte magic_number = 2018;
 const byte date_blockaddr = 4;
-const byte stuinfo_block = 5;
-const byte money_sum_block = 6;
-const byte money_record_block[5] = {7, 8, 9, 10, 11};
+const byte stuinfo_block[2] = {5, 6};
+const byte money_sum_block = 7;
+const byte money_record_block[5] = {8, 9, 10, 11, 12};
 
 byte dataBlock[16];
 byte databuffer[18];
