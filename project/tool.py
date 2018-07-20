@@ -4,7 +4,7 @@ import time
 
 
 STARTBLOCK = 5
-ENDBLOCK = 13
+ENDBLOCK = 14
 
 def clear(ser):    #初始化: 删除一些块区: 有效日期(4), 学生信息(5-6), 零钱(8), 记录(9-10,12-13)
     emptyBlock = ['\x00' for i in range(16)]
