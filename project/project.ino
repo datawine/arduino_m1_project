@@ -122,35 +122,45 @@ void loop() {
     */
     Serial.println(F("Detected Card!"));
     authentication();
-    String readstr;
-    while (!Serial.available()) {}
-    
-    while (Serial.available()) {
-        delay(30);
-        if (Serial.available() > 0) {
-            char c = Serial.read();
-            readstr += c;
-        }
-    }
 
-
-    if (readstr.length() > 0) {
+    while (1){
+      String readstr;
+      while (!Serial.available()) {}
+      while (Serial.available()) {
+          delay(30);
+          if (Serial.available() > 0) {
+              char c = Serial.read();
+              readstr += c;
+          }
+      }
+      if (readstr.length() > 0) {
         Serial.print(F("Arduino recieved: "));
-        Serial.println(readstr);
-        Serial.println(readstr.length());
         
         if(readstr[0]=='w' && readstr.length() == 21){ //command(1)+' '+index(2)+' '+data(16)
+          Serial.println(F("write command "));
           byte blockIndex;
           blockIndex = 10*(readstr[2]-'0')+(readstr[3]-'0');
           write_block_data(blockIndex, &readstr[5], 16);
         }else if(readstr[0]=='r' && readstr.length() == 4){ //command(1) index(2)
+          Serial.println(F("read command "));
           byte blockIndex;
           blockIndex = 10*(readstr[2]-'0')+(readstr[3]-'0');
           read_block_data(blockIndex, databuffer, datasize);
           Serial.print(F("read block ")); Serial.print(blockIndex); Serial.println(F(": "));
           dump_byte_array(databuffer, 16); Serial.println();
+        }else if(strncmp(readstr.c_str(),"clear",5)==0){
+          Serial.print(F("clear")); Serial.println(F(": "));
+        }else if(strncmp(readstr.c_str(),"auth",4)==0){
+          Serial.print(F("auth")); Serial.println(F(": "));
+          authentication();
+        }else if(strncmp(readstr.c_str(),"close",5)==0){
+          Serial.print(F("close commuication")); Serial.println(F(": "));
+          break;
         }
+      }
     }
+
+
     
     // Halt PICC
     mfrc522.PICC_HaltA();
