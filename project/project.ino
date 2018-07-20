@@ -121,8 +121,9 @@ void loop() {
     Serial.println();
     */
     Serial.println(F("Detected Card!"));
-    authentication();
-
+    byte current_sector = 100;
+    
+    
     while (1){
       String readstr;
       while (!Serial.available()) {}
@@ -140,19 +141,27 @@ void loop() {
           Serial.println(F("write command "));
           byte blockIndex;
           blockIndex = 10*(readstr[2]-'0')+(readstr[3]-'0');
+          if(current_sector != blockIndex/4){
+            current_sector = blockIndex/4;
+            authentication(current_sector);
+          }
           write_block_data(blockIndex, &readstr[5], 16);
+          
         }else if(readstr[0]=='r' && readstr.length() == 4){ //command(1) index(2)
           Serial.println(F("read command "));
           byte blockIndex;
           blockIndex = 10*(readstr[2]-'0')+(readstr[3]-'0');
+          if(current_sector != blockIndex/4){
+            current_sector = blockIndex/4;
+            authentication(current_sector);
+          }
           read_block_data(blockIndex, databuffer, datasize);
           Serial.print(F("read block ")); Serial.print(blockIndex); Serial.println(F(": "));
           dump_byte_array(databuffer, 16); Serial.println();
+          
         }else if(strncmp(readstr.c_str(),"clear",5)==0){
           Serial.print(F("clear")); Serial.println(F(": "));
-        }else if(strncmp(readstr.c_str(),"auth",4)==0){
-          Serial.print(F("auth")); Serial.println(F(": "));
-          authentication();
+          
         }else if(strncmp(readstr.c_str(),"close",5)==0){
           Serial.print(F("close commuication")); Serial.println(F(": "));
           break;
@@ -245,10 +254,10 @@ void print_basic_info() {
     Serial.println();
 }
 
-void authentication() {
+void authentication(byte sector) {
     MFRC522::StatusCode status;
 
-    byte trailerBlock = 4;
+    byte trailerBlock = sector*4+3;
     // Authenticate using key A
     Serial.println(F("Authenticating using key A..."));
     status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));

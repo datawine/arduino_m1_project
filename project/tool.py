@@ -39,15 +39,9 @@ def create(name, sex, ty, department, ID):
 def clear():    #初始化: 删除一些块区: 有效日期(4), 学生信息(5-6), 零钱(8), 记录(9-10,12-13)
     emptyBlock = ['\x00' for i in range(16)]
     for i in range(STARTBLOCK, ENDBLOCK+1):
-        if( i % 4 != 3):           #跳过第三块区(keyA, access, keyB)
+        if( i % 4 != 3):           #跳过trailBlock
             write_block(emptyBlock, i)
-        if( i % 4 == 0):
-            command = "auth"
-            ser.write(command)
-            time.sleep(1)
-            line = ser.read(ser.in_waiting)
-            print line[:-1]
-            print "-------"
+
 
 
 def write_name(name): #姓名 name: string
