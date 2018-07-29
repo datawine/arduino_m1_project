@@ -45,3 +45,25 @@ def operate_end(ser):
     line = ser.read(ser.in_waiting)
     print (line[:-1])
     print ("-------")
+
+def ch2x16(s):
+    clist = ''.join(s.encode("unicode_escape").decode("utf-8").split("\\u")[1: ])
+    ret = int(clist, 16).to_bytes(16, 'little')
+    return ret
+
+def x162ch(b):
+    ret = []
+    for c in b:
+        ret.append(c)
+    return ret
+
+def exactCh(chl, index):
+    i = chl[index] + chl[index + 1] * 16 * 16
+    c = ("\\u" + hex(i)[2:]).encode("utf-8").decode("unicode_escape")
+    print(c)
+
+if __name__ == "__main__":
+    name = input("汉字：")
+    ret = ch2x16(name)
+    retlist = x162ch(ret)
+    exactCh(retlist, 0)
