@@ -13,8 +13,8 @@ VERSION_NUM = sys.version[0]
 BLOCK5 = ['\x00' for i in range(16)]
 BLOCK6 = ['\x00' for i in range(16)]
 
-# ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
-ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+#ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
 
 
 #/dev/cu.usemodem1421 (Arduino/Genuino Uno)    
@@ -43,12 +43,12 @@ def create(name, sex, ty, department, ID):
 def write_name(name): #姓名 name: string
     global BLOCK5
     index = 0
-    print chardet.detect(name)
-    uni_name = name.decode('utf-8')
-    print(uni_name)
+    #print(chardet.detect(name))
+    uni_name = name.encode('utf-8')
+    #print(uni_name)
     for c in uni_name:
-        print c
-        print bytes(c)
+        # print (c)
+        # print (bytes(c))
         BLOCK5[index] = chr(c)
         index += 1
         if(index > 12):
@@ -137,6 +137,8 @@ if __name__ == '__main__':
                 print (line[:-1])
                 create(name, sex, ty, department, ID)
     #            create("黄佩", 1, 1, "数", 2015080062)
+            elif choice == 2:
+                create('黄佩', 1, 1, '数', 2015080062)
             else:
                 break
 
