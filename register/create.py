@@ -20,7 +20,7 @@ ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
 #/dev/cu.usemodem1421 (Arduino/Genuino Uno)    
 
 def create(name, sex, ty, department, ID):
-#    clear(ser)         #清空STARTBLOCK-ENDBLOCK
+    #clear(ser)         #清空STARTBLOCK-ENDBLOCK
                    
     write_name(name)    #BLOCK5
     write_sex(sex)
@@ -36,6 +36,8 @@ def create(name, sex, ty, department, ID):
 
     read_block(ser, 5)
     read_block(ser, 6)
+
+    check_basic_info(ser)
     
     operate_end(ser)
     
@@ -45,6 +47,7 @@ def write_name(name): #姓名 name: string
     index = 0
     #print(chardet.detect(name))
     uni_name = name.encode('utf-8')
+    print(type(uni_name))
     #print(uni_name)
     for c in uni_name:
         # print (c)
@@ -81,11 +84,12 @@ def write_ID(ID): #学号 ID:int
     global BLOCK6
     index = 11
     ID = hex(ID)[2:]
+    #ID = ID.to_bytes(5, 'big')
     print('ID:')
     print(ID)
     if(len(ID) != 8):
-        print('ID长度不是4字节')
-        return
+        print('ID长度不是5字节')
+
     for i in range(4):
         BLOCK6[index] = chr(int(ID[i*2:i*2+2],16))
         index += 1

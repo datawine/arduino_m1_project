@@ -47,6 +47,68 @@ def operate_end(ser):
     print (line[:-1])
     print ("-------")
 
+def check_basic_info(ser):
+    #name, department, ID, type, sex
+    print('Now we read the basic information: ')
+    begin_place = 13 #读的起始位置
+
+    command1 = "r 0"+str(5)
+    ser.write(command1.encode('ascii'))
+    time.sleep(1)
+    line = ser.read(ser.in_waiting)[:-1].decode('ascii')
+    array = line.split(' ')
+
+    uni_name = b''
+    for i in range(begin_place, begin_place+12):
+        uni_name += int(array[i], 16).to_bytes(1, 'big')
+        #print(int(array[i], 16))
+    name = uni_name.decode('utf-8')
+    print('姓名:', end=' ')
+    print(name)
+
+    sex_num = int(array[begin_place+14], 16)
+    type_num = int(array[begin_place+15], 16)
+    print('性别:', end=' ')
+    if sex_num == 1:
+        print('男')
+    elif sex_num == 2:
+        print('女')
+    else:
+        print('不详')
+    print('类别:', end=' ')
+    print(type_num)
+
+    command2 = "r 0"+str(6)
+    ser.write(command2.encode('ascii'))
+    time.sleep(1)
+    line = ser.read(ser.in_waiting)[:-1].decode('ascii')
+    array = line.split(' ')
+
+    uni_department = b''
+    for i in range(begin_place, begin_place+9):
+        uni_department += int(array[i], 16).to_bytes(1, 'big')
+        #print(int(array[i], 16))
+    department = uni_department.decode('utf-8')
+    print('院系:', end=' ')
+    print(department)
+
+    hex_id = ''
+    flag = False
+    for i in range(begin_place+11, begin_place+16):
+        #这个也有bug
+        if not flag:
+            if not array[i] == '00':
+                flag = True
+        elif flag:
+            hex_id += array[i]
+    print(hex_id)
+    # for i in range(0, len(hex_id)):
+    #     if hex_id[]
+    ID = int(hex_id)
+    print('学号:', end=' ')
+    print(ID)
+    
+
 def ch2x16(s):
     clist = ''.join(s.encode("unicode_escape").decode("utf-8").split("\\u")[1: ])
     ret = int(clist, 16).to_bytes(16, 'little')
