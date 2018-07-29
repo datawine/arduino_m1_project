@@ -13,6 +13,9 @@ def clear(ser):    #初始化: 删除一些块区: 有效日期(4), 学生信息
             write_block(ser, emptyBlock, i)
 
 def write_block(ser, dataBlock, blockIndex):
+    if( blockIndex % 4 == 3 ):
+        print "you try to write access block"
+        return
     if(blockIndex < 10):
         blockIndex = "0"+str(blockIndex)
     print(dataBlock)
