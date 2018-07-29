@@ -109,7 +109,7 @@ void loop() {
       }
       if (readstr.length() > 0) {
         Serial.print(F("Arduino recieved: "));
-        
+        //Serial.print(F(readstr.length()));
         if(readstr[0]=='w' && readstr.length() == 21){ //command(1)+' '+index(2)+' '+data(16)
           Serial.println(F("write command "));
           byte blockIndex;
