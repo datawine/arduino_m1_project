@@ -3,15 +3,12 @@ import serial
 import time
 from tool import *
 
-STARTBLOCK = 5
-ENDBLOCK = 13
-
 BLOCK5 = ['\x00' for i in range(16)]
 BLOCK6 = ['\x00' for i in range(16)]
 
 ser = serial.Serial("com3", 9600)
 
-
+stuKey = "A"*16
     
 
 def create(name, sex, ty, department, ID):
@@ -26,11 +23,11 @@ def create(name, sex, ty, department, ID):
     print("BLOCK5: ", BLOCK5)
     print("BLOCK6: ", BLOCK6)
 
-    write_block(ser, BLOCK5, 5)
-    write_block(ser, BLOCK6, 6)
+    write_block(ser, stuKey, BLOCK5, 5)
+    write_block(ser, stuKey, BLOCK6, 6)
 
-    read_block(ser, 5)
-    read_block(ser, 6)
+    read_block(ser, stuKey, 5)
+    read_block(ser, stuKey, 6)
     
     operate_end(ser)
     
