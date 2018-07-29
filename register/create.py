@@ -84,13 +84,14 @@ def write_ID(ID): #学号 ID:int
     global BLOCK6
     index = 11
     ID = hex(ID)[2:]
-    #ID = ID.to_bytes(5, 'big')
+    while len(ID) < 10:
+        ID = '0' + ID
     print('ID:')
     print(ID)
-    if(len(ID) != 8):
+    
+    if(len(ID) != 10):
         print('ID长度不是5字节')
-
-    for i in range(4):
+    for i in range(5):
         BLOCK6[index] = chr(int(ID[i*2:i*2+2],16))
         index += 1
 

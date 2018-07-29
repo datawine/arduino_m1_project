@@ -47,6 +47,15 @@ def operate_end(ser):
     print (line[:-1])
     print ("-------")
 
+def change_to_byte(com, num, data=None):
+    str_front = com + num + " "
+    byte_front = str_front.encode('ascii')
+    if not data == None:
+        for j in data:
+            ret = ord(j).to_bytes(1, 'big')
+            byte_front += ret
+    return byte_front
+
 def check_basic_info(ser):
     #name, department, ID, type, sex
     print('Now we read the basic information: ')
@@ -87,27 +96,16 @@ def check_basic_info(ser):
     uni_department = b''
     for i in range(begin_place, begin_place+9):
         uni_department += int(array[i], 16).to_bytes(1, 'big')
-        #print(int(array[i], 16))
     department = uni_department.decode('utf-8')
     print('院系:', end=' ')
     print(department)
 
     hex_id = ''
-    flag = False
     for i in range(begin_place+11, begin_place+16):
-        #这个也有bug
-        if not flag:
-            if not array[i] == '00':
-                flag = True
-        elif flag:
-            hex_id += array[i]
-    print(hex_id)
-    # for i in range(0, len(hex_id)):
-    #     if hex_id[]
-    ID = int(hex_id)
+        hex_id += array[i]
+    ID = int(hex_id, 16)
     print('学号:', end=' ')
     print(ID)
-    
 
 def ch2x16(s):
     clist = ''.join(s.encode("unicode_escape").decode("utf-8").split("\\u")[1: ])
@@ -125,15 +123,6 @@ def exactCh(chl, index):
     c = ("\\u" + hex(i)[2:]).encode("utf-8").decode("unicode_escape")
     #print(c)
     return c
-
-def change_to_byte(com, num, data=None):
-    str_front = com + num + " "
-    byte_front = str_front.encode('ascii')
-    if not data == None:
-        for j in data:
-            ret = ord(j).to_bytes(1, 'big')
-            byte_front += ret
-    return byte_front
 
 if __name__ == "__main__":
     name = input("汉字：")
