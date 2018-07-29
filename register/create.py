@@ -15,9 +15,7 @@ BLOCK6 = ['\x00' for i in range(16)]
 
 ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
 #ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
-
-
-#/dev/cu.usemodem1421 (Arduino/Genuino Uno)    
+  
 
 def create(name, sex, ty, department, ID):
     #clear(ser)         #清空STARTBLOCK-ENDBLOCK
@@ -45,17 +43,17 @@ def create(name, sex, ty, department, ID):
 def write_name(name): #姓名 name: string
     global BLOCK5
     index = 0
-    #print(chardet.detect(name))
-    uni_name = name.encode('utf-8')
-    print(type(uni_name))
-    #print(uni_name)
+    name_len = len(name)
+    len_num = 0
+    uni_name = encode_utf8(name)
     for c in uni_name:
-        # print (c)
-        # print (bytes(c))
         BLOCK5[index] = chr(c)
         index += 1
-        if(index > 12):
-            print('name长度大于四个字')
+        len_num += 1
+        if len_num > name_len * 2 - 1:
+            break
+        if index > 12:
+            print('name长度大于6个字')
             break
         
 def write_sex(sex): #性别 sex: int
@@ -71,13 +69,17 @@ def write_type(ty): #类别 ty: int
 def write_department(department): #院系  department: string
     global BLOCK6
     index = 0
-    uni_department = department.encode(encoding='utf-8')
-    print(uni_department)
+    department_len = len(department)
+    len_num = 0
+    uni_department = encode_utf8(department)
     for c in uni_department:
         BLOCK6[index] = chr(c)
         index += 1
-        if(index > 9):
-            print('department长度大于3个汉字')  
+        len_num += 1
+        if len_num > department_len * 2 - 1:
+            break
+        if index > 8:
+            print('department长度大于4个汉字')  
             break
         
 def write_ID(ID): #学号 ID:int
@@ -88,7 +90,7 @@ def write_ID(ID): #学号 ID:int
         ID = '0' + ID
     print('ID:')
     print(ID)
-    
+
     if(len(ID) != 10):
         print('ID长度不是5字节')
     for i in range(5):
@@ -106,6 +108,7 @@ if __name__ == '__main__':
         print("Welcome to create card system")
         print("0.exit")
         print("1.create")
+        print("2.test")
         if VERSION_NUM == '2':
             print('py2')
             choice = int(raw_input("Enter option: "))
@@ -129,9 +132,8 @@ if __name__ == '__main__':
             print('py3')
             choice = int(input("Enter option: "))
             
-            if(choice == 1):
+            if choice == 1:
                 init()
-                
                 ty = int(input("type: "))
                 name = input("name: ")
                 department = input("department: ")
@@ -141,7 +143,6 @@ if __name__ == '__main__':
                 line = ser.readline()
                 print (line[:-1])
                 create(name, sex, ty, department, ID)
-    #            create("黄佩", 1, 1, "数", 2015080062)
             elif choice == 2:
                 create('黄佩', 1, 1, '数', 2015080062)
             else:
