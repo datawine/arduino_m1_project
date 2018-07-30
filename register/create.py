@@ -4,34 +4,37 @@ import time
 import sys
 from tool import *
 
-import chardet
-
 STARTBLOCK = 5
 ENDBLOCK = 13
 VERSION_NUM = sys.version[0]
 
+BLOCK4 = ['\x00' for i in range(16)]
 BLOCK5 = ['\x00' for i in range(16)]
 BLOCK6 = ['\x00' for i in range(16)]
 
-ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
-#ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
+#ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
   
 
-def create(name, sex, ty, department, ID):
-    #clear(ser)         #清空STARTBLOCK-ENDBLOCK
+def create(name, sex, ty, department, ID, start_date, end_date):
+    clear(ser)         #清空STARTBLOCK-ENDBLOCK
                    
     write_name(name)    #BLOCK5
     write_sex(sex)
     write_type(ty)
     write_department(department)  #BLOCK6
     write_ID(ID)
+    write_valid(start_date, end_date)
 
+    print("BLOCK4: ", BLOCK4)    
     print("BLOCK5: ", BLOCK5)
     print("BLOCK6: ", BLOCK6)
 
+    write_block(ser, BLOCK4, 4)
     write_block(ser, BLOCK5, 5)
     write_block(ser, BLOCK6, 6)
 
+    read_block(ser, 4)
     read_block(ser, 5)
     read_block(ser, 6)
 
@@ -39,6 +42,13 @@ def create(name, sex, ty, department, ID):
     
     operate_end(ser)
     
+def write_valid(start_date, end_date):
+    global BLOCK4
+    d = start_date + end_date
+    if len(d) != 16:
+        print("错误日期格式，日期格式应如20180726")
+    for i in range(0, len(d)):
+        BLOCK4[i] = chr(int(d[i]))
 
 def write_name(name): #姓名 name: string
     global BLOCK5
@@ -98,10 +108,10 @@ def write_ID(ID): #学号 ID:int
         index += 1
 
 def init():
-    global BLOCK5, BLOCK6
+    global BLOCK4, BLOCK5, BLOCK6
+    BLOCK4 = ['\x00' for i in range(16)]
     BLOCK5 = ['\x00' for i in range(16)]
     BLOCK6 = ['\x00' for i in range(16)]
-
     
 if __name__ == '__main__':
     while(True):
@@ -123,11 +133,11 @@ if __name__ == '__main__':
                 department = raw_input("department: ")
                 ID = int(raw_input("ID: "))
                 sex = int(raw_input("sex(boy:1, girl:2): "))
-                print("please put your card")
+                start_date = raw_input("valid start date: ")
+                end_date = raw_input("valid end date: ")
                 line = ser.readline()
                 print (line[:-1])
-                create(name, sex, ty, department, ID)
-    #            create("黄佩", 1, 1, "数", 2015080062)
+                create(name, sex, ty, department, ID, start_date, end_date)
         elif VERSION_NUM == '3':
             print('py3')
             choice = int(input("Enter option: "))
@@ -139,12 +149,16 @@ if __name__ == '__main__':
                 department = input("department: ")
                 ID = int(input("ID: "))
                 sex = int(input("sex(boy:1, girl:2): "))
-                print("please put your card")
+                start_date = input("valid start date: ")
+                end_date = input("valid end date: ")
+
                 line = ser.readline()
                 print (line[:-1])
-                create(name, sex, ty, department, ID)
+                create(name, sex, ty, department, ID, start_date, end_date)
             elif choice == 2:
-                create('黄佩', 1, 1, '数', 2015080062)
+                line = ser.readline()
+                print (line[:-1])
+                create('黄佩', 1, 1, '数', 2015080062, "20150901", "20190730")
             else:
                 break
 

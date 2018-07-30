@@ -59,6 +59,20 @@ def check_basic_info(ser):
     print('Now we read the basic information: ')
     begin_place = 13 #读的起始位置，更改需要调整
 
+    #read BLOCK4
+    command0 = "r 0" + str(4)
+    ser.write(command0.encode('ascii'))
+    time.sleep(1)
+    line = ser.read(ser.in_waiting)[:-1].decode('ascii')
+    array = line.split(' ')
+    d = ""
+    for i in range(0, 16):
+        d = d + str(int(array[begin_place + i], 16))
+        if i == 7:
+            d = d + "-"
+    print('有效日期:', end=' ')
+    print(d)
+
     #read BLOCK5
     command1 = "r 0"+str(5)
     ser.write(command1.encode('ascii'))
