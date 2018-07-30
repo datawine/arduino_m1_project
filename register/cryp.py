@@ -11,19 +11,17 @@ class AEScrypt():
     def encrypt(self, text):
         cryptor = AES.new(self.key, self.mode, self.key)
         #这里密钥key 长度必须为16（AES-128）、24（AES-192）、或32（AES-256）Bytes 长度.目前AES-128足够用
-        length = 16
-        count = len(text)
-        if(count % length != 0) :
-            add = length - (count % length)
-        else:
-            add = 0
-        text = text + ('\0' * add)
-        self.ciphertext = cryptor.encrypt(text)
+        byte_text = bytes([ord(i) for i in text])
+        byte_text = byte_text + (b'\0' * (16-len(byte_text)))
+        byte_ciphertext = cryptor.encrypt(byte_text)
+        self.ciphertext = "".join([chr(int(i)) for i in byte_ciphertext])
         return self.ciphertext
 
     def decrypt(self, text):
         cryptor = AES.new(self.key, self.mode, self.key)
-        plain_text = cryptor.decrypt(text)
+        byte_text = bytes([ord(i) for i in text])
+        print(len(byte_text))
+        byte_plain_text = cryptor.decrypt(byte_text)
+        print(len(byte_plain_text))
+        plain_text = "".join([chr(int(i)) for i in byte_plain_text])
         return plain_text
-
-
