@@ -13,10 +13,10 @@ class basic_info(models.Model):
         ('B','女'),
         ('C','不详'),
     )
+    idnumber = models.IntegerField(default=2015000000, unique=True, db_index=True) #学号
     name = models.CharField(max_length=10, default="")              #姓名
     department = models.CharField(max_length=10, default="")    #院系
     identifies = models.CharField(max_length=1, choices=IDENTITY, default='A')          #类别
-    sex = models.CharField(max_length=1, choices=SEX, default='C')          #性别
-    idnumber = models.IntegerField(default=2015000000) #学号
+    sex = models.CharField(max_length=1, choices=SEX, default='C')          #性别 
 
 

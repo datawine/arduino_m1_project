@@ -35,9 +35,11 @@ def create(name, sex, ty, department, ID):
     read_block(ser, 5)
     read_block(ser, 6)
 
-    check_basic_info(ser)
+    return_dict = check_basic_info(ser)
     
     operate_end(ser)
+    print('???')
+    return return_dict
     
 
 def write_name(name): #姓名 name: string
