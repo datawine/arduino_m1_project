@@ -55,7 +55,7 @@ def operate_end(ser):
 def write_block(ser, key, dataBlock, blockIndex):
     ac = AEScrypt(key)
     en = ac.encrypt("".join(dataBlock))
-    write_block_raw(ser, dataBlock, blockIndex)
+    write_block_raw(ser, en, blockIndex)
 
 def read_block(ser, key, blockIndex):
     dataBlock_raw = read_block_raw(ser, blockIndex)

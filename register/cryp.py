@@ -25,3 +25,13 @@ class AEScrypt():
         print(len(byte_plain_text))
         plain_text = "".join([chr(int(i)) for i in byte_plain_text])
         return plain_text
+
+if __name__ == '__main__':
+    text = 'jiuchuisidamaoyu'
+    print(text)
+    key = 'miaomiaomiaomiao'
+    ac = AEScrypt(key)
+    cipher = ac.encrypt(text)
+    print(cipher)
+    text_de = ac.decrypt(cipher)
+    print(text_de)
