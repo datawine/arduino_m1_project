@@ -2,10 +2,9 @@
 import serial
 import time
 import sys
+import cryp import *
+import re
 
-
-STARTBLOCK = 5
-ENDBLOCK = 14
 VERSION_NUM = sys.version[0]
 
 
@@ -15,17 +14,19 @@ def clear(ser):    #初始化: 删除一些块区: 有效日期(4), 学生信息
         if( i % 4 != 3):           #跳过trailBlock
             write_block(ser, emptyBlock, i)
 
-def write_block(ser, dataBlock, blockIndex):
+def write_block_raw(ser, dataBlock, blockIndex):
+    if( blockIndex % 4 == 3 ):
+        print "you try to write on trailer block"
+        return
     if(blockIndex < 10):
         blockIndex = "0"+str(blockIndex)
-
     ser.write(change_to_byte("w ", str(blockIndex), dataBlock))
     time.sleep(1)
     line = ser.read(ser.in_waiting)
     print (line[:-1])
     print ("-------")
 
-def read_block(ser, blockIndex):
+def read_block_raw(ser, blockIndex):
     if(blockIndex < 10):
         blockIndex = "0"+str(blockIndex)
 
@@ -35,6 +36,12 @@ def read_block(ser, blockIndex):
     line = ser.read(ser.in_waiting)
     print (line[:-1])
     print ("-------")
+    m = re.findall(" ([\dA-F]{2})"*16, line)
+    if(len(m) == 0):
+        print "read_block_raw: match failed"
+        return
+    dataBlock = [chr(int(i,16)) for i in m[0]]
+    return dataBlock 
 
 def operate_end(ser):
     command = "close"
@@ -44,6 +51,18 @@ def operate_end(ser):
     line = ser.read(ser.in_waiting)
     print (line[:-1])
     print ("-------")
+
+def write_block(ser, key, dataBlock, blockIndex):
+    ac = AEScrypt(key)
+    en = ac.encrypt("".join(dataBlock))
+    write_block_raw(ser, dataBlock, blockIndex)
+
+def read_block(ser, key, blockIndex):
+    dataBlock_raw = read_block_raw(ser, blockIndex)
+    ac = AEScrypt(key)
+    dataBlock = ac.decrypt("".join(dataBlock_raw))
+    return dataBlock
+
 
 def change_to_byte(com, num, data=None):
     str_front = com + num + " "
