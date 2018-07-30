@@ -44,7 +44,10 @@ def create(name, sex, ty, department, ID, start_date, end_date):
     print(b5)
     print(b6)
 
-#    check_basic_info(ser)
+    info5 = check_info(b5, 5)
+    info6 = check_info(b6, 6)
+    return_dict = {**info5, **info6}
+    print(return_dict)
     
     operate_end(ser)
     
@@ -112,6 +115,61 @@ def write_ID(ID): #学号 ID:int
     for i in range(5):
         BLOCK6[index] = chr(int(ID[i*2:i*2+2],16))
         index += 1
+
+def check_info(datablock, blocknum):
+    info_dict = {}
+    begin_place = 0
+
+    if blocknum == 5:
+        array = datablock
+        for i in range(0, 16):
+            array[i] = hex(ord(array[i]))[2:]
+
+        uni_name = b''
+        for i in range(begin_place, begin_place+12):
+            uni_name += int(array[i], 16).to_bytes(1, 'big')
+        print('姓名:', end=' ')
+        name = decode_utf8(uni_name)
+        print(name)
+        info_dict['name'] = name
+
+        sex_num = int(array[begin_place+14], 16)
+        type_num = int(array[begin_place+15], 16)
+        print('性别:', end=' ')
+        if sex_num == 1:
+            print('男')
+            info_dict['sex'] = 1
+        elif sex_num == 2:
+            print('女')
+            info_dict['sex'] = 2
+        else:
+            print('不详')
+            info_dict['sex'] = 3
+        print('类别:', end=' ')
+        print(type_num)
+        info_dict['identifies'] = type_num
+    elif blocknum == 6:
+        array = datablock
+        for i in range(0, 16):
+            array[i] = hex(ord(array[i]))[2:]
+
+        uni_department = b''
+        for i in range(begin_place, begin_place+9):
+            uni_department += int(array[i], 16).to_bytes(1, 'big')
+        print('院系:', end=' ')
+        department = decode_utf8(uni_department)
+        print(department)
+        info_dict['department'] = department
+
+        hex_id = ''
+        for i in range(begin_place+11, begin_place+16):
+            hex_id += array[i]
+        ID = int(hex_id, 16)
+        print('学号:', end=' ')
+        print(ID)
+        info_dict['idnumber'] = ID
+
+    return info_dict
 
 def init():
     global BLOCK4, BLOCK5, BLOCK6

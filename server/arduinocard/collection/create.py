@@ -12,6 +12,8 @@ STARTBLOCK = 5
 ENDBLOCK = 13
 VERSION_NUM = sys.version[0]
 
+key = "A"*16
+
 BLOCK5 = ['\x00' for i in range(16)]
 BLOCK6 = ['\x00' for i in range(16)]
 
@@ -31,16 +33,23 @@ def create(name, sex, ty, department, ID):
     print("BLOCK5: ", BLOCK5)
     print("BLOCK6: ", BLOCK6)
 
-    write_block(ser, BLOCK5, 5)
-    write_block(ser, BLOCK6, 6)
+    write_block(ser, key, BLOCK5, 5)
+    write_block(ser, key, BLOCK6, 6)
 
-    read_block(ser, 5)
-    read_block(ser, 6)
+    b5 = read_block(ser, key, 5)
+    b6 = read_block(ser, key, 6)
 
-    return_dict = check_basic_info(ser)
-    flag = create_user(return_dict)
-    
     operate_end(ser)
+
+    print(b5)
+    print(b6)
+
+    info5 = check_info(b5, 5)
+    info6 = check_info(b6, 6)
+    return_dict = {**info5, **info6}
+    print(return_dict)
+    flag = create_user(return_dict)
+
     return flag
 
 def create_from_sql(idnumber):
@@ -54,15 +63,16 @@ def create_from_sql(idnumber):
         write_department(this_user.department)  #BLOCK6
         write_ID(this_user.idnumber)
 
-        write_block(ser, BLOCK5, 5)
-        write_block(ser, BLOCK6, 6)
+        write_block(ser, key, BLOCK5, 5)
+        write_block(ser, key, BLOCK6, 6)
 
-        read_block(ser, 5)
-        read_block(ser, 6)
-
-        print(check_basic_info(ser))
+        b5 = read_block(ser, key, 5)
+        b6 = read_block(ser, key, 6)
     
         operate_end(ser)
+
+        print(check_info(b5, 5))
+        print(check_info(b6, 6))
 
         return True
 
@@ -122,6 +132,61 @@ def write_ID(ID): #学号 ID:int
     for i in range(5):
         BLOCK6[index] = chr(int(ID[i*2:i*2+2],16))
         index += 1
+
+def check_info(datablock, blocknum):
+    info_dict = {}
+    begin_place = 0
+
+    if blocknum == 5:
+        array = datablock
+        for i in range(0, 16):
+            array[i] = hex(ord(array[i]))[2:]
+
+        uni_name = b''
+        for i in range(begin_place, begin_place+12):
+            uni_name += int(array[i], 16).to_bytes(1, 'big')
+        print('姓名:', end=' ')
+        name = decode_utf8(uni_name)
+        print(name)
+        info_dict['name'] = name
+
+        sex_num = int(array[begin_place+14], 16)
+        type_num = int(array[begin_place+15], 16)
+        print('性别:', end=' ')
+        if sex_num == 1:
+            print('男')
+            info_dict['sex'] = 1
+        elif sex_num == 2:
+            print('女')
+            info_dict['sex'] = 2
+        else:
+            print('不详')
+            info_dict['sex'] = 3
+        print('类别:', end=' ')
+        print(type_num)
+        info_dict['identifies'] = type_num
+    elif blocknum == 6:
+        array = datablock
+        for i in range(0, 16):
+            array[i] = hex(ord(array[i]))[2:]
+
+        uni_department = b''
+        for i in range(begin_place, begin_place+9):
+            uni_department += int(array[i], 16).to_bytes(1, 'big')
+        print('院系:', end=' ')
+        department = decode_utf8(uni_department)
+        print(department)
+        info_dict['department'] = department
+
+        hex_id = ''
+        for i in range(begin_place+11, begin_place+16):
+            hex_id += array[i]
+        ID = int(hex_id, 16)
+        print('学号:', end=' ')
+        print(ID)
+        info_dict['idnumber'] = ID
+
+    return info_dict
 
 def init():
     global BLOCK5, BLOCK6
