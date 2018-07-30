@@ -4,6 +4,7 @@ import time
 import sys
 from collection.tool import *
 from collection.updateuser import *
+from collection.getuser import *
 
 import chardet
 
@@ -41,7 +42,29 @@ def create(name, sex, ty, department, ID):
     
     operate_end(ser)
     return flag
+
+def create_from_sql(idnumber):
+    this_user = getuser(idnumber)
+    if this_user == None:
+        return False
+    else:
+        write_name(this_user.name)    #BLOCK5
+        write_sex(int(this_user.sex))
+        write_type(int(this_user.identifies))
+        write_department(this_user.department)  #BLOCK6
+        write_ID(this_user.idnumber)
+
+        write_block(ser, BLOCK5, 5)
+        write_block(ser, BLOCK6, 6)
+
+        read_block(ser, 5)
+        read_block(ser, 6)
+
+        print(check_basic_info(ser))
     
+        operate_end(ser)
+
+        return True
 
 def write_name(name): #姓名 name: string
     global BLOCK5

@@ -10,3 +10,11 @@ def create_user(info_dict):
         return True
     else:
         return False
+
+def delete_user(idnumber):
+    this_user = getuser(idnumber)
+    if this_user == None:
+        return False
+    else:
+        this_user.delete()
+        return True

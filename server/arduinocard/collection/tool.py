@@ -80,13 +80,13 @@ def check_basic_info(ser):
     print('性别:', end=' ')
     if sex_num == 1:
         print('男')
-        info_dict['sex'] = '男'
+        info_dict['sex'] = 1
     elif sex_num == 2:
         print('女')
-        info_dict['sex'] = '女'
+        info_dict['sex'] = 2
     else:
         print('不详')
-        info_dict['sex'] = '不详'
+        info_dict['sex'] = 3
     print('类别:', end=' ')
     print(type_num)
     info_dict['identifies'] = type_num

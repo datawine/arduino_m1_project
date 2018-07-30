@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from . import testdb
+from . import testdb, clear
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^testdb$', testdb.testdb),
+    url(r'^clear$', clear.clear),
 ]
