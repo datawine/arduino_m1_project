@@ -2,9 +2,11 @@
 import serial
 import time
 import sys
-import cryp import *
+from cryp import *
 import re
 
+STARTBLOCK = 5
+ENDBLOCK = 14
 VERSION_NUM = sys.version[0]
 
 
@@ -12,11 +14,11 @@ def clear(ser):    #初始化: 删除一些块区: 有效日期(4), 学生信息
     emptyBlock = ['\x00' for i in range(16)]
     for i in range(STARTBLOCK, ENDBLOCK+1):
         if( i % 4 != 3):           #跳过trailBlock
-            write_block(ser, emptyBlock, i)
+            write_block_raw(ser, emptyBlock, i)
 
 def write_block_raw(ser, dataBlock, blockIndex):
     if( blockIndex % 4 == 3 ):
-        print "you try to write on trailer block"
+        print("you try to write on trailer block")
         return
     if(blockIndex < 10):
         blockIndex = "0"+str(blockIndex)
@@ -33,15 +35,8 @@ def read_block_raw(ser, blockIndex):
     command = "r "+str(blockIndex)
     ser.write(command.encode('ascii'))
     time.sleep(1)
-    line = ser.read(ser.in_waiting)
-    print (line[:-1])
-    print ("-------")
-    m = re.findall(" ([\dA-F]{2})"*16, line)
-    if(len(m) == 0):
-        print "read_block_raw: match failed"
-        return
-    dataBlock = [chr(int(i,16)) for i in m[0]]
-    return dataBlock 
+    line = ser.read(ser.in_waiting)[:-1].decode('ascii')
+    return line
 
 def operate_end(ser):
     command = "close"
