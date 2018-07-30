@@ -2,7 +2,7 @@ from django.db import models
 import datetime
 # Create your models here.
 
-class basic_info(models.Model): 
+class Basic_info(models.Model): 
     IDENTITY = (
         ('A', '本科生'),
         ('B', '硕士生'),

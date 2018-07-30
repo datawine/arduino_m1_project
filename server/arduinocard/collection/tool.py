@@ -73,23 +73,23 @@ def check_basic_info(ser):
     print('姓名:', end=' ')
     name = decode_utf8(uni_name)
     print(name)
-    info_dict['姓名'] = name
+    info_dict['name'] = name
 
     sex_num = int(array[begin_place+14], 16)
     type_num = int(array[begin_place+15], 16)
     print('性别:', end=' ')
     if sex_num == 1:
         print('男')
-        info_dict['性别'] = '男'
+        info_dict['sex'] = '男'
     elif sex_num == 2:
         print('女')
-        info_dict['性别'] = '女'
+        info_dict['sex'] = '女'
     else:
         print('不详')
-        info_dict['性别'] = '不详'
+        info_dict['sex'] = '不详'
     print('类别:', end=' ')
     print(type_num)
-    info_dict['类别'] = type_num
+    info_dict['identifies'] = type_num
 
     #read BLOCK6
     command2 = "r 0"+str(6)
@@ -104,7 +104,7 @@ def check_basic_info(ser):
     print('院系:', end=' ')
     department = decode_utf8(uni_department)
     print(department)
-    info_dict['院系'] = department
+    info_dict['department'] = department
 
     hex_id = ''
     for i in range(begin_place+11, begin_place+16):
@@ -112,7 +112,7 @@ def check_basic_info(ser):
     ID = int(hex_id, 16)
     print('学号:', end=' ')
     print(ID)
-    info_dict['学号'] = ID
+    info_dict['idnumber'] = ID
 
     return info_dict
 

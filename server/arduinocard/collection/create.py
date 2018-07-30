@@ -3,6 +3,7 @@ import serial
 import time
 import sys
 from collection.tool import *
+from collection.updateuser import *
 
 import chardet
 
@@ -36,10 +37,10 @@ def create(name, sex, ty, department, ID):
     read_block(ser, 6)
 
     return_dict = check_basic_info(ser)
+    flag = create_user(return_dict)
     
     operate_end(ser)
-    print('???')
-    return return_dict
+    return flag
     
 
 def write_name(name): #姓名 name: string
