@@ -12,6 +12,8 @@ BLOCK4 = ['\x00' for i in range(16)]
 BLOCK5 = ['\x00' for i in range(16)]
 BLOCK6 = ['\x00' for i in range(16)]
 
+key = "A"*16
+
 #ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
 ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
   
@@ -30,13 +32,13 @@ def create(name, sex, ty, department, ID, start_date, end_date):
     print("BLOCK5: ", BLOCK5)
     print("BLOCK6: ", BLOCK6)
 
-    write_block(ser, BLOCK4, 4)
-    write_block(ser, BLOCK5, 5)
-    write_block(ser, BLOCK6, 6)
+    write_block(ser, key, BLOCK4, 4)
+    write_block(ser, key, BLOCK5, 5)
+    write_block(ser, key, BLOCK6, 6)
 
-    read_block(ser, 4)
-    read_block(ser, 5)
-    read_block(ser, 6)
+    read_block(ser, key, 4)
+    read_block(ser, key, 5)
+    read_block(ser, key, 6)
 
     check_basic_info(ser)
     
