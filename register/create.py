@@ -40,21 +40,13 @@ def create(name, sex, ty, department, ID, start_date, end_date):
     b5 = read_block(ser, key, 5)
     b6 = read_block(ser, key, 6)
 
+    info4 = check_info(b4, 4)
     info5 = check_info(b5, 5)
     info6 = check_info(b6, 6)
-    return_dict = {**info5, **info6}
+    return_dict = {**info5, **info6, **info4}
     print(return_dict)
     
     operate_end(ser)
-
-def parse_valid(line):
-    array = line.split(' ')
-    d = ""
-    for i in range(0, 16):
-        d = d + str(int(array[begin_place + i], 16))
-        if i == 7:
-            d = d + "-"
-    return d
 
 def write_valid(start_date, end_date):
     global BLOCK4
@@ -124,12 +116,11 @@ def write_ID(ID): #学号 ID:int
 def check_info(datablock, blocknum):
     info_dict = {}
     begin_place = 0
+    array = datablock
+    for i in range(0, 16):
+        array[i] = hex(ord(array[i]))[2:]
 
     if blocknum == 5:
-        array = datablock
-        for i in range(0, 16):
-            array[i] = hex(ord(array[i]))[2:]
-
         uni_name = b''
         for i in range(begin_place, begin_place+12):
             uni_name += int(array[i], 16).to_bytes(1, 'big')
@@ -153,11 +144,8 @@ def check_info(datablock, blocknum):
         print('类别:', end=' ')
         print(type_num)
         info_dict['identifies'] = type_num
-    elif blocknum == 6:
-        array = datablock
-        for i in range(0, 16):
-            array[i] = hex(ord(array[i]))[2:]
 
+    elif blocknum == 6:
         uni_department = b''
         for i in range(begin_place, begin_place+9):
             uni_department += int(array[i], 16).to_bytes(1, 'big')
@@ -173,6 +161,16 @@ def check_info(datablock, blocknum):
         print('学号:', end=' ')
         print(ID)
         info_dict['idnumber'] = ID
+        
+    elif blocknum == 4:
+        d = ""
+        for i in range(0, 16):
+            d = d + str(int(array[begin_place + i], 16))
+            if i == 7:
+                d = d + "-"
+        print('有效期限：', end=' ')
+        print(d)
+        info_dict['validdata'] = d
 
     return info_dict
 
@@ -228,6 +226,9 @@ if __name__ == '__main__':
                 line = ser.readline()
                 print (line[:-1])
                 create('黄佩', 1, 1, '数', 2015080062, "20150901", "20190730")
+            elif choice == 3:
+                b8 = read_block(ser, key, 11)
+                print(b8)            
             else:
                 break
 

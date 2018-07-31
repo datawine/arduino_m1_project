@@ -18,5 +18,6 @@ class Basic_info(models.Model):
     department = models.CharField(max_length=10, default="")    #院系
     identifies = models.CharField(max_length=1, choices=IDENTITY, default='A')          #类别
     sex = models.CharField(max_length=1, choices=SEX, default='C')          #性别 
+    validdata = models.CharField(max_length=17, default="20150101-20190730")  #有效期限
 
 
