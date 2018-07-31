@@ -114,20 +114,14 @@ void loop() {
           Serial.println(F("write command "));
           byte blockIndex;
           blockIndex = 10*(readstr[2]-'0')+(readstr[3]-'0');
-          if(current_sector != blockIndex/4){
-            current_sector = blockIndex/4;
-            authentication(current_sector);
-          }
+          authentication(current_sector);
           write_block_data(blockIndex, &readstr[5], 16);
           
         }else if(readstr[0]=='r' && readstr.length() == 4){ //command(1) index(2)
           Serial.println(F("read command "));
           byte blockIndex;
           blockIndex = 10*(readstr[2]-'0')+(readstr[3]-'0');
-          if(current_sector != blockIndex/4){
-            current_sector = blockIndex/4;
-            authentication(current_sector);
-          }
+          authentication(current_sector);
           read_block_data(blockIndex, databuffer, datasize);
           Serial.print(F("read block ")); Serial.print(blockIndex); Serial.println(F(": "));
           dump_byte_array(databuffer, 16); Serial.println();

@@ -36,7 +36,10 @@ def read_block_raw(ser, blockIndex):
     command = "r "+str(blockIndex)
     ser.write(command.encode('ascii'))
     time.sleep(1)
-    line = ser.read(ser.in_waiting)[:-1].decode('ascii')
+    line = ser.read(ser.in_waiting)[:-1]
+    print('line: ', end='')
+    print(line)
+    line = line.decode('ascii')
     m = re.findall(" ([\dA-F]{2})"*16, line)
     if(len(m) == 0):
         print ("read_block_raw: match failed")
@@ -60,6 +63,7 @@ def write_block(ser, key, dataBlock, blockIndex):
 
 def read_block(ser, key, blockIndex):
     dataBlock_raw = read_block_raw(ser, blockIndex)
+    print(dataBlock_raw)
     ac = AEScrypt(key)
     dataBlock = [i for i in ac.decrypt("".join(dataBlock_raw))]
     return dataBlock
