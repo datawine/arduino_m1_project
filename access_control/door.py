@@ -1,106 +1,123 @@
 #coding: utf-8
 import serial
 import time
+import sys
 from tool import *
 
+STARTBLOCK = 5
+ENDBLOCK = 13
+VERSION_NUM = sys.version[0]
+
+BLOCK4 = ['\x00' for i in range(16)]
 BLOCK5 = ['\x00' for i in range(16)]
 BLOCK6 = ['\x00' for i in range(16)]
 
-ser = serial.Serial("com3", 9600)
+key = "A"*16
 
-stuKey = "A"*16
-    
+#ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
+  
 
-def create(name, sex, ty, department, ID):
-    clear(ser)         #清空STARTBLOCK-ENDBLOCK
-                   
-    write_name(name)    #BLOCK5
-    write_sex(sex)
-    write_type(ty)
-    write_department(department)  #BLOCK6
-    write_ID(ID)
+def check():
+    b4 = read_block(ser, key, 4)
+    b5 = read_block(ser, key, 5)
+    b6 = read_block(ser, key, 6)
 
-    print("BLOCK5: ", BLOCK5)
-    print("BLOCK6: ", BLOCK6)
-
-    write_block(ser, stuKey, BLOCK5, 5)
-    write_block(ser, stuKey, BLOCK6, 6)
-
-    read_block(ser, stuKey, 5)
-    read_block(ser, stuKey, 6)
-    
+    info4 = check_info(b4, 4)
+    info5 = check_info(b5, 5)
+    info6 = check_info(b6, 6)
+    return_dict = {**info5, **info6, **info4}
+    print(return_dict)
     operate_end(ser)
-    
 
-def write_name(name): #姓名 name: string
-    global BLOCK5
-    index = 0
-    for c in name:
-        BLOCK5[index] = c
-        index += 1
-        if(index > 10):
-            print('name长度大于10字节')
-            break
+            
+
+def check_info(datablock, blocknum):
+    info_dict = {}
+    begin_place = 0
+    array = datablock
+    for i in range(0, 16):
+        array[i] = hex(ord(array[i]))[2:]
+
+    if blocknum == 5:
+        uni_name = b''
+        for i in range(begin_place, begin_place+12):
+            uni_name += int(array[i], 16).to_bytes(1, 'big')
+        print('姓名:', end=' ')
+        name = decode_utf8(uni_name)
+        print(name)
+        info_dict['name'] = name
+
+        sex_num = int(array[begin_place+14], 16)
+        type_num = int(array[begin_place+15], 16)
+        print('性别:', end=' ')
+        if sex_num == 1:
+            print('男')
+            info_dict['sex'] = 1
+        elif sex_num == 2:
+            print('女')
+            info_dict['sex'] = 2
+        else:
+            print('不详')
+            info_dict['sex'] = 3
+        print('类别:', end=' ')
+        print(type_num)
+        info_dict['identifies'] = type_num
+
+    elif blocknum == 6:
+        uni_department = b''
+        for i in range(begin_place, begin_place+9):
+            uni_department += int(array[i], 16).to_bytes(1, 'big')
+        print('院系:', end=' ')
+        department = decode_utf8(uni_department)
+        print(department)
+        info_dict['department'] = department
+
+        hex_id = ''
+        for i in range(begin_place+11, begin_place+16):
+            hex_id += array[i]
+        ID = int(hex_id, 16)
+        print('学号:', end=' ')
+        print(ID)
+        info_dict['idnumber'] = ID
         
-def write_sex(sex): #性别 sex: int
-    global BLOCK5
-    index = 10
-    BLOCK5[index] = chr(sex)
-    
-def write_type(ty): #类别 ty: int
-    global BLOCK5
-    index = 11
-    BLOCK5[index] = chr(ty)
-    
-def write_department(department): #院系  department: string
-    global BLOCK6
-    index = 0
-    for c in department:
-        BLOCK6[index] = c
-        index += 1
-        if(index > 8):
-            print('department长度大于8字节')  
-            break
-        
-def write_ID(ID): #学号 ID:int
-    global BLOCK6
-    index = 8
-    ID = hex(ID)[2:]
-    if(len(ID) != 8):
-        print('ID长度不是4字节')
-        return
-    for i in range(4):
-        BLOCK6[index] = chr(int(ID[i:i+2],16))
-        index += 1
+    elif blocknum == 4:
+        d = ""
+        for i in range(0, 16):
+            d = d + str(int(array[begin_place + i], 16))
+            if i == 7:
+                d = d + "-"
+        print('有效期限：', end=' ')
+        print(d)
+        info_dict['validdata'] = d
 
-def init():
-    global BLOCK5, BLOCK6
-    BLOCK5 = ['\x00' for i in range(16)]
-    BLOCK6 = ['\x00' for i in range(16)]
-
+    return info_dict
     
 if __name__ == '__main__':
     while(True):
         print("Welcome to create card system")
         print("0.exit")
-        print("1.create")
-        choice = int(raw_input("Enter option: "))
-        
-        if(choice == 0):
-            break
-        elif(choice == 1):
-            init()
+        print("1.check")
+        if VERSION_NUM == '2':
+            print('no suppor for py2')
+        elif VERSION_NUM == '3':
+            print('py3')
+            choice = int(input("Enter option: "))
             
-            ty = int(raw_input("type: "))
-            name = raw_input("name: ")
-            department = raw_input("department: ")
-            ID = int(raw_input("ID: "))
-            sex = int(raw_input("sex(boy:1, girl:2): "))
-            print("please put your card")
-            line = ser.readline()
-            print line[:-1]
-            create(name, sex, ty, department, ID)
-#            create("黄佩", 1, 1, "数", 2015080062)
-            
+            if choice == 1:
+                while (True):
+                    line = ser.readline()
+                    if len(line) != 0:
+                        print("checking!")
+                        try:
+                            check()
+                        except:
+                            operate_end(ser)
+                            print("put the card again")
+                        else:
+                            pass
+            else:
+                operate_end(ser)
+                break
 
 
