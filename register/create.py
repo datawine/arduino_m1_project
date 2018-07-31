@@ -14,8 +14,8 @@ BLOCK6 = ['\x00' for i in range(16)]
 
 key = "A"*16
 
-ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
-#ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
+#ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
   
 
 def create(name, sex, ty, department, ID, start_date, end_date):
@@ -46,8 +46,6 @@ def create(name, sex, ty, department, ID, start_date, end_date):
     return_dict = {**info5, **info6, **info4}
     print(return_dict)
     
-    operate_end(ser)
-
 def write_valid(start_date, end_date):
     global BLOCK4
     d = start_date + end_date
@@ -218,18 +216,14 @@ if __name__ == '__main__':
                 sex = int(input("sex(boy:1, girl:2): "))
                 start_date = input("valid start date: ")
                 end_date = input("valid end date: ")
-
-                line = ser.readline()
-                print (line[:-1])
                 create(name, sex, ty, department, ID, start_date, end_date)
             elif choice == 2:
-                line = ser.readline()
-                print (line[:-1])
                 create('黄佩', 1, 1, '数', 2015080062, "20150901", "20190730")
             elif choice == 3:
                 b8 = read_block(ser, key, 11)
                 print(b8)            
             else:
+                operate_end(ser)
                 break
 
 

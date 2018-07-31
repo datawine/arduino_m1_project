@@ -8,7 +8,6 @@ import re
 STARTBLOCK = 5
 ENDBLOCK = 14
 VERSION_NUM = sys.version[0]
-begin_place = 0 #读的起始位置，更改需要调整
 
 key = "A"*16
 
@@ -45,15 +44,6 @@ def read_block_raw(ser, blockIndex):
     dataBlock = [chr(int(i,16)) for i in m[0]]
     return dataBlock 
 
-def operate_end(ser):
-    command = "close"
-    print(command)
-    ser.write(str.encode(command))
-    time.sleep(1)
-    line = ser.read(ser.in_waiting)
-    print (line[:-1])
-    print ("-------")
-
 def write_block(ser, key, dataBlock, blockIndex):
     ac = AEScrypt(key)
     en = ac.encrypt("".join(dataBlock))
@@ -64,6 +54,15 @@ def read_block(ser, key, blockIndex):
     ac = AEScrypt(key)
     dataBlock = [i for i in ac.decrypt("".join(dataBlock_raw))]
     return dataBlock
+
+def operate_end(ser):
+    command = "close"
+    print(command)
+    ser.write(str.encode(command))
+    time.sleep(1)
+    line = ser.read(ser.in_waiting)
+    print (line[:-1])
+    print ("-------")
 
 def change_to_byte(com, num, data=None):
     str_front = com + num + " "
@@ -94,10 +93,12 @@ def exactCh(chl, index):
 def decode_utf8(ret):
     retlist = x162ch(ret)
     flag = 0
-    for i in range(0, 16):
-        if retlist[i] == 0:
+    i = 0
+    while(i < 12):
+        if retlist[i] == 0 and retlist[i+1] == 0:
             flag = i
             break
+        i += 2
     flag /= 2
     ans = ''
     while flag > 0:
