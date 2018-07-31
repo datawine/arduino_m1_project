@@ -93,10 +93,12 @@ def exactCh(chl, index):
 def decode_utf8(ret):
     retlist = x162ch(ret)
     flag = 0
-    for i in range(0, 16):
-        if retlist[i] == 0:
+    i = 0
+    while(i < 12):
+        if retlist[i] == 0 and retlist[i+1] == 0:
             flag = i
             break
+        i += 2
     flag /= 2
     ans = ''
     while flag > 0:
