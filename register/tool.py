@@ -37,7 +37,12 @@ def read_block_raw(ser, blockIndex):
     ser.write(command.encode('ascii'))
     time.sleep(1)
     line = ser.read(ser.in_waiting)[:-1].decode('ascii')
-    return line
+    m = re.findall(" ([\dA-F]{2})"*16, line)
+    if(len(m) == 0):
+        print ("read_block_raw: match failed")
+        return
+    dataBlock = [chr(int(i,16)) for i in m[0]]
+    return dataBlock 
 
 def operate_end(ser):
     command = "close"
@@ -51,12 +56,12 @@ def operate_end(ser):
 def write_block(ser, key, dataBlock, blockIndex):
     ac = AEScrypt(key)
     en = ac.encrypt("".join(dataBlock))
-    write_block_raw(ser, dataBlock, blockIndex)
+    write_block_raw(ser, en, blockIndex)
 
 def read_block(ser, key, blockIndex):
     dataBlock_raw = read_block_raw(ser, blockIndex)
     ac = AEScrypt(key)
-    dataBlock = ac.decrypt("".join(dataBlock_raw))
+    dataBlock = [i for i in ac.decrypt("".join(dataBlock_raw))]
     return dataBlock
 
 def change_to_byte(com, num, data=None):

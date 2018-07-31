@@ -20,9 +20,7 @@ class AEScrypt():
     def decrypt(self, text):
         cryptor = AES.new(self.key, self.mode, self.key)
         byte_text = bytes([ord(i) for i in text])
-        print(len(byte_text))
         byte_plain_text = cryptor.decrypt(byte_text)
-        print(len(byte_plain_text))
         plain_text = "".join([chr(int(i)) for i in byte_plain_text])
         return plain_text
 

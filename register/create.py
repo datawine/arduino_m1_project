@@ -14,12 +14,12 @@ BLOCK6 = ['\x00' for i in range(16)]
 
 key = "A"*16
 
-#ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
-ser = serial.Serial("/dev/cu.usbmodem145141", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+#ser = serial.Serial("/dev/cu.usbmodem145141", 9600, timeout=3.0)
   
 
 def create(name, sex, ty, department, ID, start_date, end_date):
-    clear(ser)         #清空STARTBLOCK-ENDBLOCK
+    #clear(ser)         #清空STARTBLOCK-ENDBLOCK
                    
     write_name(name)    #BLOCK5
     write_sex(sex)
@@ -32,48 +32,20 @@ def create(name, sex, ty, department, ID, start_date, end_date):
     print("BLOCK5: ", BLOCK5)
     print("BLOCK6: ", BLOCK6)
 
-    write_block_raw(ser, BLOCK4, 4)
-    write_block_raw(ser, BLOCK5, 5)
-    write_block_raw(ser, BLOCK6, 6)
+    write_block(ser, key, BLOCK4, 4)
+    write_block(ser, key, BLOCK5, 5)
+    write_block(ser, key, BLOCK6, 6)
 
-    check_basic_info(ser)
+    b4 = read_block(ser, key, 4)
+    b5 = read_block(ser, key, 5)
+    b6 = read_block(ser, key, 6)
+
+    info5 = check_info(b5, 5)
+    info6 = check_info(b6, 6)
+    return_dict = {**info5, **info6}
+    print(return_dict)
     
     operate_end(ser)
-    
-def check_basic_info():
-    b4 = read_block_raw(ser, 4)
-    print('有效日期:', end=' ')
-    print(parse_valid(b4))
-
-    b5 = read_block_raw(ser, 5)
-
-    print('姓名:', end=' ')
-    print(decode_utf8(parse_name(b5)))
-
-    sex_num = parse_sex(b5)
-    print('性别:', end=' ')
-    if sex_num == 1:
-        print('男')
-    elif sex_num == 2:
-        print('女')
-    else:
-        print('不详')
-
-    type_num = parse_type(b5)
-    print('类别:', end=' ')
-    if sex_num == 1:
-        print('本科生')
-    elif sex_num == 2:
-        print('研究生')
-    else:
-        print('博士生')
-
-    b6 = read_block_raw(ser, 6)
-    print('院系:', end=' ')
-    print(decode_utf8(parse_department(b6)))
-
-    print('学号:', end=' ')
-    print(parse_ID(parse_ID(b6)))
 
 def parse_valid(line):
     array = line.split(' ')
@@ -83,38 +55,6 @@ def parse_valid(line):
         if i == 7:
             d = d + "-"
     return d
-        
-def parse_name(line):
-    array = line.split(' ')
-    uni_name = b''
-    for i in range(begin_place, begin_place+12):
-        uni_name += int(array[i], 16).to_bytes(1, 'big')
-    return uni_name        
-
-def parse_sex(line):
-    array = line.split(' ')
-    sex_num = int(array[begin_place+14], 16)
-    return sex_num        
-
-def parse_type(line):
-    array = line.split(' ')
-    type_num = int(array[begin_place+15], 16)
-    return type_num        
-
-def parse_department(line):
-    array = line.split(' ')
-    uni_department = b''
-    for i in range(begin_place, begin_place+9):
-        uni_department += int(array[i], 16).to_bytes(1, 'big')
-    return uni_department
-
-def parse_ID(line):
-    array = line.split(' ')
-    hex_id = ''
-    for i in range(begin_place+11, begin_place+16):
-        hex_id += array[i]
-    ID = int(hex_id, 16)
-    return ID        
 
 def write_valid(start_date, end_date):
     global BLOCK4
@@ -180,6 +120,61 @@ def write_ID(ID): #学号 ID:int
     for i in range(5):
         BLOCK6[index] = chr(int(ID[i*2:i*2+2],16))
         index += 1
+
+def check_info(datablock, blocknum):
+    info_dict = {}
+    begin_place = 0
+
+    if blocknum == 5:
+        array = datablock
+        for i in range(0, 16):
+            array[i] = hex(ord(array[i]))[2:]
+
+        uni_name = b''
+        for i in range(begin_place, begin_place+12):
+            uni_name += int(array[i], 16).to_bytes(1, 'big')
+        print('姓名:', end=' ')
+        name = decode_utf8(uni_name)
+        print(name)
+        info_dict['name'] = name
+
+        sex_num = int(array[begin_place+14], 16)
+        type_num = int(array[begin_place+15], 16)
+        print('性别:', end=' ')
+        if sex_num == 1:
+            print('男')
+            info_dict['sex'] = 1
+        elif sex_num == 2:
+            print('女')
+            info_dict['sex'] = 2
+        else:
+            print('不详')
+            info_dict['sex'] = 3
+        print('类别:', end=' ')
+        print(type_num)
+        info_dict['identifies'] = type_num
+    elif blocknum == 6:
+        array = datablock
+        for i in range(0, 16):
+            array[i] = hex(ord(array[i]))[2:]
+
+        uni_department = b''
+        for i in range(begin_place, begin_place+9):
+            uni_department += int(array[i], 16).to_bytes(1, 'big')
+        print('院系:', end=' ')
+        department = decode_utf8(uni_department)
+        print(department)
+        info_dict['department'] = department
+
+        hex_id = ''
+        for i in range(begin_place+11, begin_place+16):
+            hex_id += array[i]
+        ID = int(hex_id, 16)
+        print('学号:', end=' ')
+        print(ID)
+        info_dict['idnumber'] = ID
+
+    return info_dict
 
 def init():
     global BLOCK4, BLOCK5, BLOCK6
