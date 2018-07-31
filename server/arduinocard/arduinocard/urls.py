@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^testdb$', testdb.testdb),
     url(r'^clear$', clear.clear),
+    url(r'^testmj$', testdb.testmj),
 ]

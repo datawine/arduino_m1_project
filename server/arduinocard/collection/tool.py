@@ -8,8 +8,10 @@ import re
 STARTBLOCK = 5
 ENDBLOCK = 14
 VERSION_NUM = sys.version[0]
-
 key = "A"*16
+
+ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+#ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
 
 def clear(ser):    #初始化: 删除一些块区: 有效日期(4), 学生信息(5-6), 零钱(8), 记录(9-10,12-13)
     emptyBlock = ['\x00' for i in range(16)]
@@ -105,6 +107,67 @@ def decode_utf8(ret):
         ans += exactCh(retlist, int(flag * 2 - 2))
         flag -= 1
     return ans
+
+def check_info(datablock, blocknum):
+    info_dict = {}
+    begin_place = 0
+    array = datablock
+    for i in range(0, 16):
+        array[i] = hex(ord(array[i]))[2:]
+
+    if blocknum == 5:
+        uni_name = b''
+        for i in range(begin_place, begin_place+12):
+            uni_name += int(array[i], 16).to_bytes(1, 'big')
+        print('姓名:', end=' ')
+        name = decode_utf8(uni_name)
+        print(name)
+        info_dict['name'] = name
+
+        sex_num = int(array[begin_place+14], 16)
+        type_num = int(array[begin_place+15], 16)
+        print('性别:', end=' ')
+        if sex_num == 1:
+            print('男')
+            info_dict['sex'] = 1
+        elif sex_num == 2:
+            print('女')
+            info_dict['sex'] = 2
+        else:
+            print('不详')
+            info_dict['sex'] = 3
+        print('类别:', end=' ')
+        print(type_num)
+        info_dict['identifies'] = type_num
+
+    elif blocknum == 6:
+        uni_department = b''
+        for i in range(begin_place, begin_place+9):
+            uni_department += int(array[i], 16).to_bytes(1, 'big')
+        print('院系:', end=' ')
+        department = decode_utf8(uni_department)
+        print(department)
+        info_dict['department'] = department
+
+        hex_id = ''
+        for i in range(begin_place+11, begin_place+16):
+            hex_id += array[i]
+        ID = int(hex_id, 16)
+        print('学号:', end=' ')
+        print(ID)
+        info_dict['idnumber'] = ID
+        
+    elif blocknum == 4:
+        d = ""
+        for i in range(0, 16):
+            d = d + str(int(array[begin_place + i], 16))
+            if i == 7:
+                d = d + "-"
+        print('有效期限：', end=' ')
+        print(d)
+        info_dict['validdate'] = d
+
+    return info_dict
 
 if __name__ == "__main__":
     name = input("汉字：")
