@@ -10,12 +10,13 @@ ENDBLOCK = 14
 VERSION_NUM = sys.version[0]
 begin_place = 13 #读的起始位置，更改需要调整
 
+key = "A"*16
 
 def clear(ser):    #初始化: 删除一些块区: 有效日期(4), 学生信息(5-6), 零钱(8), 记录(9-10,12-13)
     emptyBlock = ['\x00' for i in range(16)]
     for i in range(STARTBLOCK, ENDBLOCK+1):
         if( i % 4 != 3):           #跳过trailBlock
-            write_block_raw(ser, emptyBlock, i)
+            write_block(ser, key, emptyBlock, i)
 
 def write_block_raw(ser, dataBlock, blockIndex):
     if( blockIndex % 4 == 3 ):

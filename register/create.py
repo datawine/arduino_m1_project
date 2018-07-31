@@ -14,12 +14,12 @@ BLOCK6 = ['\x00' for i in range(16)]
 
 key = "A"*16
 
-ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
-#ser = serial.Serial("/dev/cu.usbmodem145141", 9600, timeout=3.0)
+#ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
   
 
 def create(name, sex, ty, department, ID, start_date, end_date):
-    #clear(ser)         #清空STARTBLOCK-ENDBLOCK
+    clear(ser)         #清空STARTBLOCK-ENDBLOCK
                    
     write_name(name)    #BLOCK5
     write_sex(sex)

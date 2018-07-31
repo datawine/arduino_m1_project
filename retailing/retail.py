@@ -14,7 +14,7 @@ BLOCK8 = ['\x00' for i in range(16)]
 key = "A"*16
 
 #ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
-ser = serial.Serial("/dev/cu.usbmodem145141", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
 
 def query():
     s, n = read_money_info()
@@ -52,7 +52,7 @@ def charge(s, site_name):
         record.append([s, t, site_name, 0])
         write_num(n)
 
-        write_block_raw(ser, BLOCK8, 8)
+        write_block(ser, key, BLOCK8, 8)
         write_record(record)
 
 def consume(s, site_name):
@@ -76,12 +76,14 @@ def consume(s, site_name):
         record.append([s, t, site_name, 1])
         write_num(n)
 
-        write_block_raw(ser, BLOCK8, 8)
+        write_block(ser, key, BLOCK8, 8)
         write_record(record)
 
 def read_money_info():
-    line = read_block_raw(ser, 8)
-    array = line.split(' ')
+    array = read_block(ser, key, 8)
+    for i in range(0, 16):
+        array[i] = hex(ord(array[i]))[2:]
+    print(array)
     return parse_money_sum(array), parse_record_num(array)
 
 def parse_money_sum(array):
@@ -100,8 +102,9 @@ def parse_record(num):
     r_index = [9, 10, 12, 13, 14]
     cnt = 0
     while cnt < num:
-        line = read_block_raw(ser, r_index[cnt])
-        array = line.split(' ')
+        array = read_block(ser, key, r_index[cnt])
+        for i in range(0, 16):
+            array[i] = hex(ord(array[i]))[2:]
         s = parse_money_sum(array)
         ty = int(array[begin_place + 15], 16)
         uni_name = b''
@@ -111,8 +114,8 @@ def parse_record(num):
         t = ""
         t_month = str(int(array[begin_place + 3], 16)).zfill(2)
         t_day = str(int(array[begin_place + 4], 16)).zfill(2)
-        t_hour = str(int(array[begin_place + 5], 16).zfill(2)
-        t_min = str(int(array[begin_place + 6], 16).zfill(2)
+        t_hour = str(int(array[begin_place + 5], 16)).zfill(2)
+        t_min = str(int(array[begin_place + 6], 16)).zfill(2)
         t = t_month + "/" + t_day + "/" + t_hour + ":" + t_min
 
         record.append([s, t, uni_name, ty])
@@ -128,7 +131,7 @@ def write_record(record_list):
         write_time(record[1], tmpblock)
         write_site(record[2], tmpblock)
         write_type(record[3], tmpblock)
-        write_block_raw(ser, tmpblock, r_index[cnt])
+        write_block(ser, key, tmpblock, r_index[cnt])
         cnt = cnt + 1
 
 def write_money(s, tmpblock):
@@ -172,11 +175,12 @@ def init():
     global BLOCK8
     BLOCK8 = ['\x00' for i in range(16)]
 
-site_name = "小卖部1"
+site_name = "小卖部一"
 
 if __name__ == '__main__':
+    print("Welcome to retailing system")
     while(True):
-        print("Welcome to retailing system")
+        print("---------------")
         print("0.exit")
         print("1.query")
         print("2.charge")
@@ -191,12 +195,17 @@ if __name__ == '__main__':
             if choice == 1:
                 line = ser.readline()
                 print (line[:-1])
-                create(name, sex, ty, department, ID, start_date, end_date)
+                query()
             elif choice == 2:
                 line = ser.readline()
                 print (line[:-1])
-                create('黄佩', 1, 1, '数', 2015080062, "20150901", "20190730")
+                s = float(input("Enter money to charge:", end = ' '))
+                charge(s, site_name)
+            elif choice == 3:
+                line = ser.readline()
+                print (line[:-1])
+                s = float(input("Enter money to consume:", end = ' '))
+                consume(s, site_name)
             else:
                 break
-
 
