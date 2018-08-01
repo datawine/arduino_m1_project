@@ -33,6 +33,13 @@ def create(name, sex, ty, department, ID, start_date, end_date):
 
     return True
 
+def refresh_valid(start_date, end_date):
+    write_valid(start_date, end_date) # BLOCK4
+    print("BLOCK4: ", BLOCK4)    
+    write_block(ser, key, BLOCK4, 4)
+    operate_end(ser)
+    return True
+
 def write_valid(start_date, end_date):
     global BLOCK4
     d = start_date + end_date

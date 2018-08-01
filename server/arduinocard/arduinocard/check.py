@@ -6,6 +6,8 @@ import datetime
 from collection.create import *
 from collection.readinfo import *
 from collection.tool import *
+from collection.getuser import *
+from collection.updateuser import *
 
 def checkvalid(request):
     response = ''
@@ -45,7 +47,7 @@ def createcard(request):
         response = 'Failed!'
     return HttpResponse("<p>" + response + "</p>")
 
-def cleancard(request):
+def clearcard(request):
     response = ''
     request.encoding='utf-8'
     info_dict = request.GET
@@ -57,4 +59,24 @@ def cleancard(request):
             response = 'Failed!'
     else:
         response = 'Failed!'
+    return HttpResponse("<p>" + response + "</p>")
+
+def renewcard(request):
+    response = ''
+    return HttpResponse("<p>" + response + "</p>")
+
+def refreshcard(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'newdate' in info_dict and 'idnumber' in info_dict:
+        flag = update_validdate(int(info_dict['idnumber']), info_dict['newdate'])
+        if flag:
+            this_user = getuser(int(info_dict['idnumber']))
+            old_start_date = this_user.validdate
+            response = 'S ' + old_start_date
+        else:
+            response = 'F'
+    else:
+        response = 'F'
     return HttpResponse("<p>" + response + "</p>")
