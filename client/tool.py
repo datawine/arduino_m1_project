@@ -2,16 +2,15 @@
 import serial
 import time
 import sys
-from collection.cryp import *
+from cryp import *
 import re
 
-STARTBLOCK = 5
+STARTBLOCK =  5
 ENDBLOCK = 14
 VERSION_NUM = sys.version[0]
 key = "A"*16
 
-ser = serial.Serial("/dev/cu.usbmodem1411", 9600, timeout=3.0)
-#ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
 
 def clear(ser):    #初始化: 删除一些块区: 有效日期(4), 学生信息(5-6), 零钱(8), 记录(9-10,12-13)
     emptyBlock = ['\x00' for i in range(16)]
@@ -26,7 +25,7 @@ def write_block_raw(ser, dataBlock, blockIndex):
     if(blockIndex < 10):
         blockIndex = "0"+str(blockIndex)
     ser.write(change_to_byte("w ", str(blockIndex), dataBlock))
-    time.sleep(1)
+    time.sleep(0.4)
     line = ser.read(ser.in_waiting)
     print (line[:-1])
     print ("-------")
@@ -37,7 +36,7 @@ def read_block_raw(ser, blockIndex):
 
     command = "r "+str(blockIndex)
     ser.write(command.encode('ascii'))
-    time.sleep(1)
+    time.sleep(0.8)
     line = ser.read(ser.in_waiting)[:-1].decode('ascii')
     m = re.findall(" ([\dA-F]{2})"*16, line)
     if(len(m) == 0):
@@ -61,7 +60,7 @@ def operate_end(ser):
     command = "close"
     print(command)
     ser.write(str.encode(command))
-    time.sleep(1)
+    time.sleep(0.4)
     line = ser.read(ser.in_waiting)
     print (line[:-1])
     print ("-------")
