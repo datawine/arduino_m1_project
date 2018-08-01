@@ -13,6 +13,9 @@ BLOCK5 = ['\x00' for i in range(16)]
 BLOCK6 = ['\x00' for i in range(16)]
 
 key = "A"*16
+
+#ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
   
   
 class CreateSystem(object):
@@ -27,7 +30,9 @@ class CreateSystem(object):
 		return text
 
 def create(name, sex, ty, department, ID, start_date, end_date):
-   write_name(name)    #BLOCK5
+    clear(ser)         #清空STARTBLOCK-ENDBLOCK
+                   
+    write_name(name)    #BLOCK5
     write_sex(sex)
     write_type(ty)
     write_department(department)  #BLOCK6
@@ -38,11 +43,19 @@ def create(name, sex, ty, department, ID, start_date, end_date):
     print("BLOCK5: ", BLOCK5)
     print("BLOCK6: ", BLOCK6)
 
-    info4 = "BLOCK4: "+str(BLOCK4)
-    info5 = "BLOCK5: "+str(BLOCK5)
-    info6 = "BLOCK6: "+str(BLOCK6)
-    return_dict = info4+info5+info6
-	return return_dict
+    write_block(ser, key, BLOCK4, 4)
+    write_block(ser, key, BLOCK5, 5)
+    write_block(ser, key, BLOCK6, 6)
+
+    b4 = read_block(ser, key, 4)
+    b5 = read_block(ser, key, 5)
+    b6 = read_block(ser, key, 6)
+
+    info4 = check_info(b4, 4)
+    info5 = check_info(b5, 5)
+    info6 = check_info(b6, 6)
+    return_dict = {**info5, **info6, **info4}
+    print(return_dict)
     
 def write_valid(start_date, end_date):
     global BLOCK4
