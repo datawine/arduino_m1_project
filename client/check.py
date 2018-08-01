@@ -5,6 +5,7 @@ import datetime
 import json
 from tool import *
 from create import *
+from retail import *
 
 SERVER = '127.0.0.1' #主机IP  
 PORT = '8000' #端口号
@@ -209,3 +210,8 @@ def refresh_end_date(idnumber, new_date):
     else:
         return CONSTRUCTIONERROR
     return FAILED
+
+def check_money():
+    query()
+    #这个后面应该需要做成一个可以返回东西
+    return False 

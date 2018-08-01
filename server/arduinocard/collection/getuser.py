@@ -24,3 +24,6 @@ def check_valid(user_ID, validdate):
             return True
         else:
             return False
+
+def getallusers():
+    return True

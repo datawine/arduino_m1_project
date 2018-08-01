@@ -142,7 +142,20 @@ def refresh_card():
     elif flag == CONSTRUCTIONERROR:
         print('注册失败！信息错误！！')
     return True
+
+def query_info():
+    try:
+        check_money()
+        print('查询成功！')
+    except:
+        print('出问题了！')
+    else:
+        pass
+    return True
  
+def regain_money():
+    return True
+
 if __name__ == '__main__':
     #test_create()
     #test_get()
@@ -157,6 +170,8 @@ if __name__ == '__main__':
         print('6.clean info (delete the information in db)')
         print('7.ask for info')
         print('8.refresh the card')
+        print('9.query')
+        print('10.get money record from server')
         choice = int(input("Choice: "))
         if choice == 0:
             print('Bye bye')
@@ -184,5 +199,10 @@ if __name__ == '__main__':
         elif choice == 8:
             print('注册并延长有效期！')
             refresh_card()
+        elif choice == 9:
+            print('查询卡内余额和交易记录！')
+            query_info()
+        elif choice = =10:
+            print('挂失获取余额！')
         else:
             break
