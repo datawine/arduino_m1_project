@@ -4,6 +4,7 @@ import time
 import sys
 from cryp import *
 import re
+import datetime
 
 STARTBLOCK =  5
 ENDBLOCK = 14
@@ -25,7 +26,7 @@ def write_block_raw(ser, dataBlock, blockIndex):
     if(blockIndex < 10):
         blockIndex = "0"+str(blockIndex)
     ser.write(change_to_byte("w ", str(blockIndex), dataBlock))
-    time.sleep(0.4)
+    time.sleep(0.8)
     line = ser.read(ser.in_waiting)
     print (line[:-1])
     print ("-------")
@@ -167,6 +168,18 @@ def check_info(datablock, blocknum):
         info_dict['validdate'] = d
 
     return info_dict
+
+def check_date_valid(datestring):
+    if not len(datestring) == 8:
+        return False
+    year = int(datestring[0:4])
+    month = int(datestring[4:6])
+    day = int(datestring[6:8])
+    try:
+        datetime.date(year, month, day)
+        return True
+    except:
+        return False
 
 if __name__ == "__main__":
     name = input("汉字：")
