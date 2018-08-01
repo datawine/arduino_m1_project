@@ -9,7 +9,7 @@ const path = require('path')
  *************************************************************/
 
 const PY_DIST_FOLDER = 'pycalcdist'
-const PY_FOLDER = 'pycalc'
+const PY_FOLDER = '../register'
 const PY_MODULE = 'api' // without .py suffix
 
 let pyProc = null
