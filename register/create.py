@@ -14,8 +14,9 @@ BLOCK5 = ['\x00' for i in range(16)]
 BLOCK6 = ['\x00' for i in range(16)]
 
 key = "A"*16
-  
-  
+
+ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
+
 class CreateSystem(object):
     def create_card(self, name, sex, ty, department, ID, start_date, end_date):
         global create
@@ -28,6 +29,8 @@ class CreateSystem(object):
         return text
 
 def create(name, sex, ty, department, ID, start_date, end_date):
+    clear(ser)         #清空STARTBLOCK-ENDBLOCK
+
     write_name(name)    #BLOCK5
     write_sex(sex)
     write_type(ty)
@@ -39,11 +42,21 @@ def create(name, sex, ty, department, ID, start_date, end_date):
     print("BLOCK5: ", BLOCK5)
     print("BLOCK6: ", BLOCK6)
 
-    info4 = "BLOCK4: "+str(BLOCK4)
-    info5 = "BLOCK5: "+str(BLOCK5)
-    info6 = "BLOCK6: "+str(BLOCK6)
-    return_dict = info4+info5+info6
-    return return_dict
+    write_block(ser, key, BLOCK4, 4)
+    write_block(ser, key, BLOCK5, 5)
+    write_block(ser, key, BLOCK6, 6)
+
+    b4 = read_block(ser, key, 4)
+    b5 = read_block(ser, key, 5)
+    b6 = read_block(ser, key, 6)
+
+    info4 = check_info(b4, 4)
+    info5 = check_info(b5, 5)
+    info6 = check_info(b6, 6)
+    return_dict = {**info5, **info6, **info4}
+    print(return_dict)
+      
+    return str(return_dict)
     
 def write_valid(start_date, end_date):
     global BLOCK4
@@ -184,7 +197,7 @@ def parse_port():
     except Exception as e:
         pass
     return '{}'.format(port)
-    
+
 def main():
     addr = 'tcp://127.0.0.1:' + parse_port()
     s = zerorpc.Server(CreateSystem())
