@@ -3,8 +3,6 @@ import serial
 import time
 import sys
 from tool import *
-import zerorpc
-import traceback
 
 STARTBLOCK = 5
 ENDBLOCK = 13
@@ -16,55 +14,48 @@ BLOCK6 = ['\x00' for i in range(16)]
 
 key = "A"*16
 
-ser = serial.Serial("/dev/ttyS0", 9600, timeout=3.0)
-
+#ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
+  
+  
 class CreateSystem(object):
-    def create_card(self, name, sex, ty, department, ID, start_date, end_date):
-        global create, read_block
-        try:
-            #info = create(name, int(sex), int(ty), department, int(ID), start_date, end_date)
-            info = "name: "+name+"sex: "+sex+"ty: "+ty+"department: "+department+"ID: "+ID+"start_date: "+start_date+"end_date: "+end_date
-            return info
-        except Exception as e:
-            return str(e)+str(traceback.print_exc())
-    def echo(self, text):
-        return text
+	def create_card(self, name, sex, ty, department, ID, start_date, end_date):
+		global create
+		try:
+			info = create(name, int(sex), int(ty), department, int(ID), start_date, end_date)
+			return str(info)
+		except Exception as e:
+			return 0
+	def echo(self, text):
+		return text
 
 def create(name, sex, ty, department, ID, start_date, end_date):
-    try:
-        clear(ser)         #清空STARTBLOCK-ENDBLOCK
+    clear(ser)         #清空STARTBLOCK-ENDBLOCK
+                   
+    write_name(name)    #BLOCK5
+    write_sex(sex)
+    write_type(ty)
+    write_department(department)  #BLOCK6
+    write_ID(ID)
+    write_valid(start_date, end_date)
 
-        write_name(name)    #BLOCK5
-        write_sex(sex)
-        write_type(ty)
-        write_department(department)  #BLOCK6
-        write_ID(ID)
-        write_valid(start_date, end_date)
+    print("BLOCK4: ", BLOCK4)    
+    print("BLOCK5: ", BLOCK5)
+    print("BLOCK6: ", BLOCK6)
 
-        print("BLOCK4: ", BLOCK4)    
-        print("BLOCK5: ", BLOCK5)
-        print("BLOCK6: ", BLOCK6)
+    write_block(ser, key, BLOCK4, 4)
+    write_block(ser, key, BLOCK5, 5)
+    write_block(ser, key, BLOCK6, 6)
 
-        write_block(ser, key, BLOCK4, 4)
-        write_block(ser, key, BLOCK5, 5)
-        write_block(ser, key, BLOCK6, 6)
-        #return "1231231"
-        
-        b4 = read_block(ser, key, 4)
-        b5 = read_block(ser, key, 5)
-        b6 = read_block(ser, key, 6)
-        
-        
-        info4 = check_info(b4, 4)
-        info5 = check_info(b5, 5)
-        info6 = check_info(b6, 6)
-        return_dict = {**info5, **info6, **info4}
-        print(return_dict)
-          
-        return str(return_dict)
-        
-    except Exception as e:
-        return str(e)+str(traceback.print_exc())
+    b4 = read_block(ser, key, 4)
+    b5 = read_block(ser, key, 5)
+    b6 = read_block(ser, key, 6)
+
+    info4 = check_info(b4, 4)
+    info5 = check_info(b5, 5)
+    info6 = check_info(b6, 6)
+    return_dict = {**info5, **info6, **info4}
+    print(return_dict)
     
 def write_valid(start_date, end_date):
     global BLOCK4
@@ -205,7 +196,7 @@ def parse_port():
     except Exception as e:
         pass
     return '{}'.format(port)
-
+	
 def main():
     addr = 'tcp://127.0.0.1:' + parse_port()
     s = zerorpc.Server(CreateSystem())
@@ -215,4 +206,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    operate_end(ser)
+	operate_end(ser)

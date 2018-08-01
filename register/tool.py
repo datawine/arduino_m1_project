@@ -37,6 +37,7 @@ def read_block_raw(ser, blockIndex):
     ser.write(command.encode('ascii'))
     time.sleep(0.4)
     line = ser.read(ser.in_waiting)[:-1].decode('ascii')
+    #return "line: "+str(line)+"blockIndex: "+str(blockIndex)+"command: "+str(command)+"ser: "+str(ser)
     m = re.findall(" ([\dA-F]{2})"*16, line)
     if(len(m) == 0):
         print ("read_block_raw: match failed")
