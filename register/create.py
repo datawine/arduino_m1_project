@@ -22,7 +22,8 @@ class CreateSystem(object):
     def create_card(self, name, sex, ty, department, ID, start_date, end_date):
         global create, read_block
         try:
-            info = create(name, int(sex), int(ty), department, int(ID), start_date, end_date)
+            #info = create(name, int(sex), int(ty), department, int(ID), start_date, end_date)
+            info = "name: "+name+"sex: "+sex+"ty: "+ty+"department: "+department+"ID: "+ID+"start_date: "+start_date+"end_date: "+end_date
             return info
         except Exception as e:
             return str(e)+str(traceback.print_exc())
@@ -31,7 +32,7 @@ class CreateSystem(object):
 
 def create(name, sex, ty, department, ID, start_date, end_date):
     try:
-#        clear(ser)         #清空STARTBLOCK-ENDBLOCK
+        clear(ser)         #清空STARTBLOCK-ENDBLOCK
 
         write_name(name)    #BLOCK5
         write_sex(sex)
