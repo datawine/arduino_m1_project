@@ -1,19 +1,19 @@
-from __future__ import print_function
-from calc import calc as real_calc
+#coding: utf-8
 import sys
 import zerorpc
 
 class CreateSystem(object):
     def create_card(self, name, sex, ty, department, ID, start_date, end_date):
-        """based on the input text, return the int result"""
+        global create
         try:
             string = "name: "+name+"\nsex: "+sex+"\nty: "+ty+"\ndepartment: "+department
             string += "\nID: "+ID+"\nvalid_date: "+start_date+"---"+end_date
             return string
+            #info = create(name, int(sex), int(ty), department, int(ID), start_date, end_date)
+            #return str(info)
         except Exception as e:
-            return 0.0    
+            return 0
     def echo(self, text):
-        """echo any text"""
         return text
 
 def parse_port():
@@ -23,7 +23,7 @@ def parse_port():
     except Exception as e:
         pass
     return '{}'.format(port)
-
+    
 def main():
     addr = 'tcp://127.0.0.1:' + parse_port()
     s = zerorpc.Server(CreateSystem())
@@ -33,4 +33,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    operate_end(ser)
 

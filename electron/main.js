@@ -8,7 +8,7 @@ const path = require('path')
  * py process
  *************************************************************/
 
-const PY_DIST_FOLDER = 'pycalcdist'
+const PY_DIST_FOLDER = '../registerdist'
 const PY_FOLDER = '../register'
 const PY_MODULE = 'create' // without .py suffix
 
@@ -42,7 +42,7 @@ const createPyProc = () => {
   if (guessPackaged()) {
     pyProc = require('child_process').execFile(script, [port])
   } else {
-    pyProc = require('child_process').spawn('python', [script, port])
+    pyProc = require('child_process').spawn('python3', [script, port])
   }
  
   if (pyProc != null) {

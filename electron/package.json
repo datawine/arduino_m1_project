@@ -18,7 +18,8 @@
     "zerorpc": "^0.9.7"
   },
   "devDependencies": {
-    "electron": "^2.0.6",
+    "electron": "^1.7.6",
+    "electron-rebuild": "^1.8.2",
     "zmq": "^2.15.3"
   }
 }
