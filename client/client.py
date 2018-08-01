@@ -38,10 +38,15 @@ def test_post():
     print('good')
 
 def check_entrance():
-    while(True):
-        print('Hold on~')
-        if check_valid() == SUCCESS:
-            print('身份验证，请进！')
+    try:
+        while(True):
+            print('Hold on~')
+            if check_valid() == SUCCESS:
+                print('身份验证，请进！')
+    except:
+        print('出问题了！')
+    else:
+        pass
     return False
 
 def create_new():
@@ -52,7 +57,13 @@ def create_new():
     ID = int(input("ID: "))
     start_date = input("valid start date: ")
     end_date = input("valid end date: ")
-    flag = create_new_member(name, sex, ty, department, ID, start_date, end_date) 
+    flag = False
+    try:
+        flag = create_new_member(name, sex, ty, department, ID, start_date, end_date) 
+    except:
+        flag = False
+    else:
+        pass
     if flag == SUCCESS:
         print('创建成功！')
     elif flag == FAILED:
@@ -62,7 +73,13 @@ def create_new():
     return True
 
 def create_test():
-    flag = create_new_member('猫鱼', 1, 1, '计算机', 2015011251, "20150901", "20190730")
+    flag = False
+    try:
+        flag = create_new_member('猫鱼', 1, 1, '计算机', 2015011251, "20150901", "20190730")
+    except:
+        flag = False
+    else:
+        pass
     if flag == SUCCESS:
         print('创建成功！')
     elif flag == FAILED:
@@ -72,18 +89,34 @@ def create_test():
     return True
 
 def clear_card():
-    clear_card_info()
-    print('清空成功！')
+    try:
+        clear_card_info()
+        print('清空成功！')
+    except:
+        print('出问题了！')
+    else:
+        pass
     return False
 
 def clear_info():
-    clear_user_info()
-    print('开除成功！')
+    try:
+        clear_user_info()
+        print('开除成功！')
+    except:
+        print('出问题了！')
+    else:
+        pass
     return True
 
 def renew_card():
     ID = int(input("ID: "))
-    flag = renew_from_sql(ID)
+    flag = False
+    try:
+        flag = renew_from_sql(ID)
+    except:
+        flag = False
+    else:
+        pass
     if flag == SUCCESS:
         print('获取成功！')
     elif flag == FAILED:
@@ -95,7 +128,13 @@ def renew_card():
 def refresh_card():
     ID = int(input("ID: "))
     new_end_date = input("new date: ")
-    flag = refresh_end_date(ID, new_end_date)
+    flag = False
+    try:
+        flag = refresh_end_date(ID, new_end_date)
+    except:
+        flag = False
+    else:
+        pass
     if flag == SUCCESS:
         print('注册成功！')
     elif flag == FAILED:
