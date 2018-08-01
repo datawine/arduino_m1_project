@@ -72,11 +72,13 @@ def create_test():
     return True
 
 def clear_card():
-    clear_user_info()
+    clear_card_info()
+    print('清空成功！')
     return False
 
 def clear_info():
-    clear_card_info()
+    clear_user_info()
+    print('开除成功！')
     return True
 
 def renew_card():
@@ -130,7 +132,7 @@ if __name__ == '__main__':
             clear_card()
         elif choice == 6:
             print('清除学籍信息！')
-            clear_card()
+            clear_info()
         elif choice == 7:
             print('获得卡片信息！')
             renew_card()

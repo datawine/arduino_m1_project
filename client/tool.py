@@ -6,7 +6,7 @@ from cryp import *
 import re
 import datetime
 
-STARTBLOCK =  5
+STARTBLOCK =  4
 ENDBLOCK = 14
 VERSION_NUM = sys.version[0]
 key = "A"*16

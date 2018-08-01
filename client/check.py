@@ -94,6 +94,21 @@ def create_new_member(name, sex, ty, department, ID, start_date, end_date):
         return FAILED
     return FAILED
 
+def clear_card_info():
+    while (True):
+        line = ser.readline()
+        if len(line) != 0:
+            print("Writing!")
+            try:
+                clear(ser)
+                break
+            except:
+                operate_end(ser)
+                print("put the card again")
+            else:
+                pass
+    return SUCCESS
+
 def clear_user_info():
     info_dict = {}
     while (True):
@@ -132,21 +147,6 @@ def clear_user_info():
     else:
         return FAILED
     return FAILED
-
-def clear_card_info():
-    while (True):
-        line = ser.readline()
-        if len(line) != 0:
-            print("Writing!")
-            try:
-                clear(ser)
-                break
-            except:
-                operate_end(ser)
-                print("put the card again")
-            else:
-                pass
-    return SUCCESS
 
 def renew_from_sql(idnumber):
     url = 'http://' + SERVER + ':' + PORT + '/renewcard'
