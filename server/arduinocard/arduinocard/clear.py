@@ -5,5 +5,5 @@ from collection.updateuser import *
 
 def clear(request):
     response = ' '
-    response = str(delete_user(2015080062))
+    response = str(delete_user(2015011251))
     return HttpResponse("<p>" + response + "</p>")
