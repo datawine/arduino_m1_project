@@ -83,7 +83,13 @@ def clear_info():
 
 def renew_card():
     ID = int(input("ID: "))
-    renew_from_sql(ID)
+    flag = renew_from_sql(ID)
+    if flag == SUCCESS:
+        print('获取成功！')
+    elif flag == FAILED:
+        print('获取失败！')
+    elif flag == CONSTRUCTIONERROR:
+        print('获取失败！信息错误！！')
     return True
 
 def refresh_card():

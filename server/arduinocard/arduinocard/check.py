@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.db import models
 from django.shortcuts import render
 import datetime
+import json
 
 from collection.create import *
 from collection.readinfo import *
@@ -63,6 +64,24 @@ def clearcard(request):
 
 def renewcard(request):
     response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'idnumber' in info_dict:
+        this_user = getuser(int(info_dict['idnumber']))
+        if this_user == None:
+            response = 'F'
+        else:
+            new_dict = {}
+            new_dict['name'] = this_user.name
+            new_dict['sex'] = this_user.sex
+            new_dict['identifies'] = this_user.identifies
+            new_dict['department'] = this_user.department
+            new_dict['idnumber'] = this_user.idnumber
+            new_dict['validdate'] = this_user.validdate
+            string_to_send = json.dumps(new_dict)
+            response = 'S ' + string_to_send
+    else:
+        response = 'F'
     return HttpResponse("<p>" + response + "</p>")
 
 def refreshcard(request):

@@ -2,6 +2,7 @@ import time
 import sys
 import requests
 import datetime
+import json
 from tool import *
 from create import *
 
@@ -155,8 +156,27 @@ def renew_from_sql(idnumber):
     req = res.text
     req = req[3:-4]
     print(req)
-
-    return SUCCESS
+    flag_word = req[0]
+    info_dict = json.loads(req[2:])
+    print(info_dict)
+    if flag_word == 'S':
+        while (True):
+            line = ser.readline()
+            if len(line) != 0:
+                print("Writing!")
+                try:
+                    create(info_dict['name'], int(info_dict['sex']), int(info_dict['identifies']), info_dict['department'], 
+                            int(info_dict['idnumber']), info_dict['validdate'][0:8], info_dict['validdate'][9:])
+                    break
+                except:
+                    operate_end(ser)
+                    print("put the card again")
+                else:
+                    pass
+        return SUCCESS
+    else:
+        return CONSTRUCTIONERROR
+    return FAILED
 
 def refresh_end_date(idnumber, new_date):
     if not check_date_valid(new_date):
