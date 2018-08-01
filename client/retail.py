@@ -3,6 +3,7 @@ import serial
 import time
 import sys
 from datetime import *
+import datetime
 from tool import *
 
 STARTBLOCK = 5
@@ -41,6 +42,8 @@ def query():
                 .format(record[i][1], record[i][2], money_int, money_float), end = ' ')
             print()
 
+    operate_end(ser)
+
 def charge(s, site_name):
     tmps, tmpn = read_money_info()
     if tmps + s >= 1000000:
@@ -55,15 +58,17 @@ def charge(s, site_name):
         else:
             n = tmpn
             record = parse_record(tmpn)[1:]
-        tmptime = str(datetime.now().month).zfill(2) + "/" + \
-                str(datetime.now().day).zfill(2) + "/" + \
-                str(datetime.now().hour).zfill(2) + ":" + \
-                str(datetime.now().minute).zfill(2)
+        tmptime = str(datetime.datetime.now().month).zfill(2) + "/" + \
+                str(datetime.datetime.now().day).zfill(2) + "/" + \
+                str(datetime.datetime.now().hour).zfill(2) + ":" + \
+                str(datetime.datetime.now().minute).zfill(2)
         record.append([s, tmptime, site_name, 0])
         write_num(n)
 
         write_block(ser, key, BLOCK8, 8)
         write_record(record)
+
+        operate_end(ser)
 
 def consume(s, site_name):
     tmps, tmpn = read_money_info()
@@ -79,15 +84,17 @@ def consume(s, site_name):
         else:
             n = tmpn
             record = parse_record(tmpn)[1:]
-        tmptime = str(datetime.now().month).zfill(2) + "/" + \
-                str(datetime.now().day).zfill(2) + "/" + \
-                str(datetime.now().hour).zfill(2) + ":" + \
-                str(datetime.now().minute).zfill(2)
+        tmptime = str(datetime.datetime.now().month).zfill(2) + "/" + \
+                str(datetime.datetime.now().day).zfill(2) + "/" + \
+                str(datetime.datetime.now().hour).zfill(2) + ":" + \
+                str(datetime.datetime.now().minute).zfill(2)
         record.append([s, tmptime, site_name, 1])
         write_num(n)
 
         write_block(ser, key, BLOCK8, 8)
         write_record(record)
+
+        operate_end(ser)
 
 def read_money_info():
     array = read_block(ser, key, 8)
@@ -180,9 +187,15 @@ def write_type(ty, tmpblock):
     index = 15
     tmpblock[index] = chr(ty)
 
-def wrtie_in_money(num):
+def write_in_money(num):
     write_num(num)
     write_block(ser, key, BLOCK8, 8)
+
+def clear_record():
+    emptyBlock = ['\x00' for i in range(16)]
+    for i in range(9, 15):
+        if( i % 4 != 3):           #跳过trailBlock
+            write_block(ser, key, emptyBlock, i)
 
 def init():
     global BLOCK8

@@ -99,3 +99,41 @@ def refreshcard(request):
     else:
         response = 'F'
     return HttpResponse("<p>" + response + "</p>")
+
+def regainmoney(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'idnumber' in info_dict:
+        print('miaomiaomi')
+        this_user = getuser(int(info_dict['idnumber']))
+        if this_user == None:
+            response = 'F'
+        else:
+            user_money = this_user.money
+            response = 'S ' + str(user_money)
+    else:
+        response = 'F'
+    return HttpResponse("<p>" + response + "</p>")
+
+def chargemoney(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'idnumber' in info_dict and 'charge' in info_dict:
+        print('miaomiaomi')
+        this_user = getuser(int(info_dict['idnumber']))
+        if this_user == None:
+            response = 'F'
+        else:
+            new_money = this_user.money + int(info_dict['charge'])
+            if new_money >= 1000000:
+                response = 'F'
+                print('冲太多了！！！')
+            else:
+                this_user.money = new_money
+                this_user.save()
+                response = 'Success'
+    else:
+        response = 'F'
+    return HttpResponse("<p>" + response + "</p>")

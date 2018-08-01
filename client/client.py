@@ -10,6 +10,7 @@ PORT = '8000' #端口号
 # BUFLEN = 1024 
 # USER_list = ['user01', 'user02']
 url = 'http://' + SERVER + ':' + PORT + '/testdb'
+my_site_name = ''
 
 def test_create():
     url = 'http://' + SERVER + ':' + PORT + '/testdb'
@@ -154,11 +155,42 @@ def query_info():
     return True
  
 def regain_money():
+    flag = False
+    try:
+        flag = regain_money_from_sql()
+    except:
+        flag = False
+    else:
+        pass
+    if flag == SUCCESS:
+        print('获取成功！且之前的交易记录已丢失！')
+    elif flag == FAILED:
+        print('获取失败！')
+    elif flag == CONSTRUCTIONERROR:
+        print('获取失败！信息错误！！')
+    return True
+
+def charge_money(site_name):
+    number = int(input("How much: "))
+    flag = False
+    try:
+        flag = charge_in_client(number, site_name)
+    except:
+        flag = False
+    else:
+        pass
+    if flag == SUCCESS:
+        print('充值成功！')
+    elif flag == FAILED:
+        print('充值失败！')
+    elif flag == CONSTRUCTIONERROR:
+        print('充值失败！信息错误！！')
     return True
 
 if __name__ == '__main__':
     #test_create()
     #test_get()
+    my_site_name = '小卖部一'
     while(True):
         print('choose the mode:')
         print('0.exit')
@@ -172,6 +204,7 @@ if __name__ == '__main__':
         print('8.refresh the card')
         print('9.query')
         print('10.get money record from server')
+        print('11.charge money')
         choice = int(input("Choice: "))
         if choice == 0:
             print('Bye bye')
@@ -202,7 +235,11 @@ if __name__ == '__main__':
         elif choice == 9:
             print('查询卡内余额和交易记录！')
             query_info()
-        elif choice = =10:
+        elif choice == 10:
             print('挂失获取余额！')
+            regain_money()
+        elif choice == 11:
+            print('充钱！！！')
+            charge_money(my_site_name)
         else:
             break

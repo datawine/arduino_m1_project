@@ -215,3 +215,89 @@ def check_money():
     query()
     #这个后面应该需要做成一个可以返回东西
     return False 
+
+def regain_money_from_sql():
+    info_dict = {}
+    while (True):
+        line = ser.readline()
+        print(line)
+        if len(line) != 0:
+            print("checking!")
+            try:
+                info_dict = check()
+                break
+            except:
+                operate_end(ser)
+                print("put the card again")
+            else:
+                pass
+
+    url = 'http://' + SERVER + ':' + PORT + '/regainmoney'
+    data = {'idnumber':info_dict['idnumber']}
+    res=requests.get(url,params=data)
+    req = res.text
+    req = req[3:-4]
+    print(req)
+    flag_word = req[0]
+    content = req[2:]
+
+    if flag_word == 'S':
+        new_money = content
+        while (True):
+            line = ser.readline()
+            if len(line) != 0:
+                print("Writing!")
+                try:
+                    write_in_money(int(new_money))
+                    clear_record()
+                    break
+                except:
+                    operate_end(ser)
+                    print("put the card again")
+                else:
+                    pass
+        return SUCCESS
+    else:
+        return CONSTRUCTIONERROR
+    return FAILED
+
+def charge_in_client(number, site_name):
+    info_dict = {}
+    while (True):
+        line = ser.readline()
+        print(line)
+        if len(line) != 0:
+            print("checking!")
+            try:
+                info_dict = check()
+                break
+            except:
+                operate_end(ser)
+                print("put the card again")
+            else:
+                pass
+
+    url = 'http://' + SERVER + ':' + PORT + '/chargemoney'
+    data = {'idnumber':info_dict['idnumber'], 'charge':str(number)}
+    res=requests.get(url,params=data)
+    req = res.text
+    req = req[3:-4]
+    print(req)
+
+    if req == 'Success':
+        while (True):
+            line = ser.readline()
+            if len(line) != 0:
+                print("Writing!")
+                try:
+                    charge(number, site_name)
+                    break
+                except Exception as e:
+                    operate_end(ser)
+                    print("put the card again")
+                else:
+                    pass
+        return SUCCESS
+    else:
+        return CONSTRUCTIONERROR
+    return FAILED
