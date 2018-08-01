@@ -1,0 +1,13 @@
+准备:
+nodejs, npm
+
+pip3 install pyinstaller
+pip3 install zerorpc
+
+
+安装:
+npm install
+
+
+执行:
+sudo npm start         (sudo是因为读串口时需要)
