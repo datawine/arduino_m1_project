@@ -6,7 +6,6 @@
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/fyears/electron-python-example",
   "keywords": [
     "Electron",
     "Python",
@@ -19,8 +18,7 @@
     "zerorpc": "^0.9.7"
   },
   "devDependencies": {
-    "electron": "^1.7.6",
-    "electron-packager": "^9.0.1",
-    "electron-rebuild": "^1.8.2"
+    "electron": "^2.0.6",
+    "zmq": "^2.15.3"
   }
 }
