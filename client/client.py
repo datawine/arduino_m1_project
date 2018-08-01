@@ -39,6 +39,7 @@ def test_post():
 
 def check_entrance():
     while(True):
+        print('Hold on~')
         if check_valid():
             print('身份验证，请进！')
     return False
