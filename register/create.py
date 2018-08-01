@@ -17,6 +17,17 @@ key = "A"*16
 #ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
 ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
   
+  
+class CreateSystem(object):
+	def create_card(self, name, sex, ty, department, ID, start_date, end_date):
+		global create
+		try:
+			info = create(name, int(sex), int(ty), department, int(ID), start_date, end_date)
+			return str(info)
+		except Exception as e:
+			return 0
+	def echo(self, text):
+		return text
 
 def create(name, sex, ty, department, ID, start_date, end_date):
     clear(ser)         #清空STARTBLOCK-ENDBLOCK
@@ -177,53 +188,22 @@ def init():
     BLOCK4 = ['\x00' for i in range(16)]
     BLOCK5 = ['\x00' for i in range(16)]
     BLOCK6 = ['\x00' for i in range(16)]
-    
+
+def parse_port():
+    port = 4242
+    try:
+        port = int(sys.argv[1])
+    except Exception as e:
+        pass
+    return '{}'.format(port)
+	
+def main():
+    addr = 'tcp://127.0.0.1:' + parse_port()
+    s = zerorpc.Server(CreateSystem())
+    s.bind(addr)
+    print('start running on {}'.format(addr))
+    s.run()
+
 if __name__ == '__main__':
-    while(True):
-        print("Welcome to create card system")
-        print("0.exit")
-        print("1.create")
-        print("2.test")
-        if VERSION_NUM == '2':
-            print('py2')
-            choice = int(raw_input("Enter option: "))
-            
-            if(choice == 0):
-                break
-            elif(choice == 1):
-                init()
-                
-                ty = int(raw_input("type: "))
-                name = raw_input("name: ")
-                department = raw_input("department: ")
-                ID = int(raw_input("ID: "))
-                sex = int(raw_input("sex(boy:1, girl:2): "))
-                start_date = raw_input("valid start date: ")
-                end_date = raw_input("valid end date: ")
-                line = ser.readline()
-                print (line[:-1])
-                create(name, sex, ty, department, ID, start_date, end_date)
-        elif VERSION_NUM == '3':
-            print('py3')
-            choice = int(input("Enter option: "))
-            
-            if choice == 1:
-                init()
-                ty = int(input("type: "))
-                name = input("name: ")
-                department = input("department: ")
-                ID = int(input("ID: "))
-                sex = int(input("sex(boy:1, girl:2): "))
-                start_date = input("valid start date: ")
-                end_date = input("valid end date: ")
-                create(name, sex, ty, department, ID, start_date, end_date)
-            elif choice == 2:
-                create('黄佩', 1, 1, '数', 2015080062, "20150901", "20190730")
-            elif choice == 3:
-                b8 = read_block(ser, key, 11)
-                print(b8)            
-            else:
-                operate_end(ser)
-                break
-
-
+    main()
+	operate_end(ser)
