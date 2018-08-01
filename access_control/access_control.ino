@@ -148,7 +148,9 @@ void loop() {
     mfrc522.PICC_HaltA();
     // Stop encryption on PCD
     mfrc522.PCD_StopCrypto1();
-    
+
+    delay(2000);
+
 }
 
 byte trans_char_byte(byte *databuffer, char *s, byte start) {
