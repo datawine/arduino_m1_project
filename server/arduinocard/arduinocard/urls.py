@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^testmj$', testdb.testmj),
     url(r'^checkvalid$', check.checkvalid),
     url(r'^createcard$', check.createcard),
+    url(r'^cleancard$', check.cleancard),
 ]

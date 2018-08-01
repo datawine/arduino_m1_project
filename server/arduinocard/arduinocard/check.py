@@ -44,3 +44,17 @@ def createcard(request):
     else:
         response = 'Failed!'
     return HttpResponse("<p>" + response + "</p>")
+
+def cleancard(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'idnumber' in info_dict:
+        flag = delete_user(int(info_dict['idnumber']))
+        if flag:
+            response = 'Success!'
+        else:
+            response = 'Failed!'
+    else:
+        response = 'Failed!'
+    return HttpResponse("<p>" + response + "</p>")

@@ -72,8 +72,12 @@ def create_test():
     return True
 
 def clear_card():
-    clear_card_info()
+    clear_user_info()
     return False
+
+def clear_info():
+    clear_card_info()
+    return True
  
 if __name__ == '__main__':
     #test_create()
@@ -86,6 +90,7 @@ if __name__ == '__main__':
         print('3.create new')
         print('4.create test')
         print('5.clean card')
+        print('6.clean info (delete the information in db)')
         choice = int(input("Choice: "))
         if choice == 0:
             print('Bye bye')
@@ -103,6 +108,9 @@ if __name__ == '__main__':
             create_test()
         elif choice == 5:
             print('清除卡片！')
+            clear_card()
+        elif choice == 6:
+            print('清除学籍信息！')
             clear_card()
         else:
             break

@@ -94,17 +94,44 @@ def create_new_member(name, sex, ty, department, ID, start_date, end_date):
         return FAILED
     return FAILED
 
-def check_date_valid(datestring):
-    if not len(datestring) == 8:
-        return False
-    year = int(datestring[0:4])
-    month = int(datestring[4:6])
-    day = int(datestring[6:8])
-    try:
-        datetime.date(year, month, day)
-        return True
-    except:
-        return False
+def clear_user_info():
+    info_dict = {}
+    while (True):
+        line = ser.readline()
+        print(line)
+        if len(line) != 0:
+            print("checking!")
+            try:
+                info_dict = check()
+                break
+            except:
+                operate_end(ser)
+                print("put the card again")
+            else:
+                pass
+    url = 'http://' + SERVER + ':' + PORT + '/checkvalid'
+    data = {'idnumber':str(info_dict['idnumber'])}
+    res=requests.get(url,params=data)
+    req = res.text
+    req = req[3:-4]
+    print(req)
+    if req == 'Success!':
+        while (True):
+            line = ser.readline()
+            if len(line) != 0:
+                print("Writing!")
+                try:
+                    clear(ser)
+                    break
+                except:
+                    operate_end(ser)
+                    print("put the card again")
+                else:
+                    pass
+        return SUCCESS
+    else:
+        return FAILED
+    return FAILED
 
 def clear_card_info():
     while (True):
@@ -119,4 +146,5 @@ def clear_card_info():
                 print("put the card again")
             else:
                 pass
+    return True
     return True
