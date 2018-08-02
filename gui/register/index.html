@@ -27,6 +27,9 @@
           <li>
             <a class="button" href="#three">注销旧卡</a>
           </li>
+          <li>
+            <a class="button" href="#four">添加门禁</a>
+          </li>
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="one">
@@ -167,7 +170,18 @@
 				<div class="submit"><input id="clear_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></form>
 				<!-- Stop Formoid form-->
           </div>
-        </div>
+
+					<div class="tab-pane" id="four">
+						<!-- Start Formoid form-->
+						<link rel="stylesheet" href="cancel_files/formoid1/formoid-solid-blue.css" type="text/css" />
+						<script type="text/javascript" src="cancel_files/formoid1/jquery.min.js"></script>
+						<form class="formoid-solid-blue" style="background-color:#FFFFFF;font-size:14px;font-family:'Roboto',Arial,Helvetica,sans-serif;color:#34495E;max-width:480px;min-width:150px" method="post"><div class="title"><h2>添加门禁</h2></div>
+							<div class="element-input"><label class="title"></label><div class="item-cont"><input id="doorid" class="large" type="text" name="input" placeholder="门禁：添加学号"/><span class="icon-place"></span></div></div>
+							<div class="submit"><input id="door_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></form>
+						<!-- Stop Formoid form-->
+							</div>		
+
+				</div>
       </div>
     </div>
   </div>
