@@ -37,7 +37,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="container">
 		<!--logo-->
 			<div class="logo">
-				<h1><a href="index.html">零钱包系统</a></h1>
+				<h1><a href="index.html">学生卡管理系统</a></h1>
 			</div>
     </div>
 </header>
@@ -51,7 +51,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					 <li>
 			          	 <div class="banner1">
 			           		<div class="caption">
-					          	<h3><span>欢迎</span> 到零钱包系统</h3>
+					          	<h3><span>欢迎</span> 到学生卡管理系统</h3>
 			          		</div>
 			          	</div>
 			         </li>
@@ -90,20 +90,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div id="parentVerticalTab">
 					<div class="agileits-tab_nav">
 					<ul class="resp-tabs-list hor_1">
-						<li><i class="icon fa fa-mobile" aria-hidden="true"></i>查询余额</li>
+						<li><i class="icon fa fa-mobile" aria-hidden="true"></i>综合信息</li>
 						<li><i class="icon fa fa-television" aria-hidden="true"></i>圈存</li>
-						<li><i class="icon fa fa-credit-card" aria-hidden="true"></i>消费</li>
+						<li><i class="icon fa fa-credit-card" aria-hidden="true"></i>挂失获取金额</li>
 						<li><i class="icon fa fa-lightbulb-o" aria-hidden="true"></i>消费记录</li>
 					</ul>
 					</div>
 					<div class="resp-tabs-container hor_1">
-                        <!-- tab1 -->
+<!-- tab1 -->
 						<div>
                             <div class="tabs-box">
                                 
                     <img src="images/mobile.png" class="w3ls-mobile" alt="" data-pin-nopin="true">
                 <ul class="tabs-menu">
-                    <li><a href ="javascript:return false;"><label class="radio"><i></i>查询余额</label></a></li>
+                    <li><a href ="javascript:return false;"><label class="radio"><i></i>综合信息</label></a></li>
                 </ul>
 			     <div class="clearfix"> </div>
 			     <div class="tab-grids">
@@ -111,20 +111,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		                      <div class="login-form">	
 						<form method="post" id="signup">
 						<ol>
-<!--查询余额-->						
+<!-- 综合信息 -->						
+<li><h4>姓名</h4>
+<h3><div id="name"></div></h3></li>
+<li><h4>院系</h4>
+<h3><div id="dep"></div></h3></li>
+<li><h4>学号</h4>
+<h3><div id="ID"></div></h3></li>
+<li><h4>类别</h4>
+<h3><div id="ty"></div></h3></li>
+<li><h4>有效期</h4>
+<h3><div id="start_date"></div>-<div id="end_date"></div></h3></li>
 <li><h4>卡内余额</h4>
-<div id="balance"></div></li>
-
-
-						</ol>
+<h3><div id="balance"></div></h3></li>
+				        </ol>
 						</form>															
 						</div>	
-					</div>
-				
-				
-				<div id="tab2" class="tab-grid">
-						  <div class="login-form">
-					<form method="post" id="signup">
+                    </div>
+					
+					
+                    <div id="tab2" class="tab-grid">
+		                      <div class="login-form">
+						<form method="post" id="signup">
 						<ol>							
 							
 				        </ol>
@@ -166,14 +174,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             
 						<ol>
 						
-<!--圈存-->						
-<li><a href ="javascript:return false;"><label class="radio"><i></i>圈存</label></a></li>
+						
+<!-- 圈存 -->
+<li><a href ="javascript:return false;"><label class="radio"><i></i>圈存</label></a></li>						
 <!-- Start Formoid form-->
 <li>卡内余额: <div id="balance"></div></li>
-<div class="element-input"><label class="title"></label><div class="item-cont"><input id="seller1" class="large" type="text" name="input" placeholder="卖方"/><span class="icon-place"></span></div></div>
 <div class="element-input"><label class="title"></label><div class="item-cont"><input id="recharge" class="large" type="text" name="input" placeholder="输入金额"/><span class="icon-place"></span></div></div>
 <li><div class="submit"><input class="submit" id="recharge_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></li>
 <!-- Stop Formoid form-->
+
+
 
 				        </ol>
 						</form>	
@@ -187,16 +197,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <div id="tab2" class="tab-grid">
 		                      <div class="login-form">
 						<form method="post" id="signup">
-						<ol>
-
-<!--消费-->						
-<li><a href ="javascript:return false;"><label class="radio"><i></i>消费</label></a></li>
+						<ol>	
+<!-- 挂失获取金额 -->							
+<li><li><a href ="javascript:return false;"><label class="radio"><i></i>挂失获取金额</label></a></li>
 <!-- Start Formoid form-->
-<li>卡内余额: <div id="balance"></div></li>
-<div class="element-input"><label class="title"></label><div class="item-cont"><input id="seller2" class="large" type="text" name="input" placeholder="卖方"/><span class="icon-place"></span></div></div>
-<div class="element-input"><label class="title"></label><div class="item-cont"><input id="consume" class="large" type="text" name="input" placeholder="输入金额"/><span class="icon-place"></span></div></div>
-<li><div class="submit"><input class="submit" id="consume_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></li>
+<table style="width:100%">
+  <tr>
+    <th>挂失日期</th>
+    <th>金额</th>
+  </tr>
+  <tr>
+    <td><div id="lose_date"></div></td>
+    <td><div id="lose_money"></div></td>
+  </tr>
+</table></li>                        
+<li><div class="submit"><input class="submit" id="return_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></li>
 <!-- Stop Formoid form-->
+
 
 				        </ol>
 						</form>	
@@ -205,8 +222,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
                     </div>
                     </div>
-                        <!-- /tab3 -->
-                        <!-- tab4 -->
+<!-- /tab3 -->
+<!-- tab4 -->
                         <div>
                             <i class="icon fa fa-lightbulb-o inner-icon" aria-hidden="true"></i>
                     <div id="tab2" class="tab-grid">
@@ -214,8 +231,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<form method="post" id="signup">
 						<ol>
 
-
-<!--消费记录-->						
+<!-- 消费记录 -->	
 <li><a href ="javascript:return false;"><label class="radio"><i></i>消费记录</label></a></li>
 <!-- Start Formoid form-->
 <table style="width:100%">
@@ -245,13 +261,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </tr>
 </table>
 <!-- Stop Formoid form-->
+
 				        </ol>
 						</form>	
 																							
 						</div>	
 						</div>
                         </div>
-                        <!-- /tab4 -->
+<!-- /tab4 -->
                         
                         
                         
@@ -363,11 +380,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</script>
 			<!-- start-smoth-scrolling -->
 		<!-- //here ends scrolling icon -->
+
+
 </body>
 
-<script>
-	require('./renderer.js')
-  </script>  
+  <script>
+    require('./renderer.js')
+  </script>
 
 <!-- //body -->
 </html>
