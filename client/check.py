@@ -66,9 +66,67 @@ class CreateSystem(object):
         elif flag == CONSTRUCTIONERROR:
             return '注册失败！信息错误！！'
         return True
+    
+    def renew_card(self, idnumber):
+        flag = False
+        try:
+            flag = renew_from_sql(int(idnumber))
+        except:
+            return '获取失败！发生错误！！'
+        else:
+            pass
+        if flag == SUCCESS:
+            return '获取成功！'
+        elif flag == FAILED:
+            return '获取失败！'
+        elif flag == CONSTRUCTIONERROR:
+            return '获取失败！信息错误！！'
 
     def clear_cards(self, signal1, signal2):
-        return signal1+' '+signal2
+        if signal2 == '1':
+            #全删
+            try:
+                clear_user_info()
+                return '清空成功！' 
+            except:
+                return '出问题了！' 
+            else:
+                pass
+            return '出问题了！'
+        elif signal1 == '1':
+            #只删卡
+            try:
+                clear_card_info()
+                return '清空成功！' 
+            except:
+                return '出问题了！' 
+            else:
+                pass
+            return '出问题了！'
+        else:
+            return 'You think that is funny???'
+
+    def add_valid(self, idnumber):
+        id_list = []
+        id_list.append(idnumber)
+        flag = add_valid_user(id_list)
+        if flag == SUCCESS:
+            return '添加成功！' 
+        elif flag == FAILED:
+            return '添加失败！' 
+        elif flag == CONSTRUCTIONERROR:
+            return '添加失败！信息错误！！' 
+
+    def delete_valid(self, idnumber):
+        id_list = []
+        id_list.append(idnumber)
+        flag = delete_valid_user(id_list)
+        if flag == SUCCESS:
+            return '删除成功！' 
+        elif flag == FAILED:
+            return '删除失败！' 
+        elif flag == CONSTRUCTIONERROR:
+            return '删除失败！信息错误！！' 
 
     def echo(self, text):
         return text
@@ -195,6 +253,7 @@ def clear_card_info():
             print("Writing!")
             try:
                 clear(ser)
+                operate_end(ser)
                 break
             except:
                 operate_end(ser)
@@ -232,6 +291,7 @@ def clear_user_info():
                 print("Writing!")
                 try:
                     clear(ser)
+                    operate_end(ser)
                     break
                 except:
                     operate_end(ser)
@@ -500,6 +560,24 @@ def add_valid_user(id_list):
     for ids in id_list:
         if ids in data:
             valid_dict[ids] = True
+        else:
+            return CONSTRUCTIONERROR
+
+    with open('./valid.json', 'w') as v2:
+        json.dump(valid_dict, v2)
+
+    return SUCCESS
+
+def delete_valid_user(id_list):
+    valid_dict = {}
+    with open('./valid.json', 'r') as v1:
+        valid_dict = json.load(v1)
+    with open('./data.json', 'r') as f:
+        data = json.load(f)
+
+    for ids in id_list:
+        if ids in data:
+            valid_dict[ids] = False
         else:
             return CONSTRUCTIONERROR
 

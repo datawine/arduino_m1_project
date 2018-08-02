@@ -1,1 +1,1 @@
-name: 垂死大猫鱼sex: 1ty: 1department: 土木工程ID: 2015011251start_date: 2018-08-03end_date: 2018-08-04
+name: 猫鱼sex: 0ty: 0department: 雕塑ID: 2015011251start_date: 2018-08-02end_date: 2018-08-25

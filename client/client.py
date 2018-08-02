@@ -232,6 +232,19 @@ def add_valid():
         print('添加失败！信息错误！！')
     return False
 
+def delete_valid():
+    ids = input("Input ID : ")
+    id_list = []
+    id_list.append(ids)
+    flag = delete_valid_user(id_list)
+    if flag == SUCCESS:
+        print('删除成功！')
+    elif flag == FAILED:
+        print('删除失败！')
+    elif flag == CONSTRUCTIONERROR:
+        print('删除失败！信息错误！！')
+    return False
+
 if __name__ == '__main__':
     #test_create()
     #test_get()
@@ -253,6 +266,7 @@ if __name__ == '__main__':
         print('12.consume money')
         print('13.get info from server')
         print('14.add valid users')
+        print('15.delete valid users')
         choice = int(input("Choice: "))
         if choice == 0:
             print('Bye bye')
@@ -297,6 +311,9 @@ if __name__ == '__main__':
             get_all_info(my_site_name)
         elif choice == 14:
             print('添加新的门禁！')
+            add_valid()
+        elif choice == 15:
+            print('删除旧的门禁！')
             add_valid()
         else:
             break
