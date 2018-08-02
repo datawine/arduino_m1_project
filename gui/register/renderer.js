@@ -22,6 +22,13 @@ let end_date = document.querySelector('#end_date')
 
 let submit_button = document.querySelector('#create_button')
 
+let end_date2 = document.querySelector('#end_date_2');
+let extend_button = document.querySelector('#extend_button')
+
+var cb1 = document.getElementsByName("checkbox1");
+var cb2 = document.getElementsByName("checkbox2");
+let clear_button = document.querySelector('#clear_button')
+
 submit_button.addEventListener('click', () => {
   var sex_val;
   for (i = 0; i < sex.length; i ++) {
@@ -37,9 +44,28 @@ submit_button.addEventListener('click', () => {
   }
   client.invoke("create_card", name.value, sex_val, ty_val, department.value, ID.value, start_date.value, end_date.value, (error, res) => {
       if(error) {
-//      console.error(error)
     } else {
     }
   })
 })
-//formula.dispatchEvent(new Event('input'))
+
+extend_button.addEventListener('click', () => {
+  client.invoke("create_card", end_date2.value, (error, res) => {
+      if(error) {
+    } else {
+    }
+  })
+})
+
+clear_button.addEventListener('click', () => {
+  var cb1_val, cb2_val;
+  if (cb1.checked)
+    cb1_val = "?";
+  if (cb2.checked)
+    cb2_val = "?";
+  client.invoke("create_card", cb1_val, cb2_val, (error, res) => {
+      if(error) {
+    } else {
+    }
+  })
+})

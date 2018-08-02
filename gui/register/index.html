@@ -149,8 +149,8 @@
 				<script type="text/javascript" src="extend_files/formoid1/jquery.min.js"></script>
 				<form class="formoid-solid-blue" style="background-color:#FFFFFF;font-size:14px;font-family:'Roboto',Arial,Helvetica,sans-serif;color:#34495E;max-width:480px;min-width:150px" method="post"><div class="title"><h2>延长有效期</h2></div>
 					<div class="element-separator"><hr><h3 class="section-break-title">延长到</h3></div>
-					<div class="element-date"><label class="title"></label><div class="item-cont"><input class="large" data-format="yyyy-mm-dd" type="date" name="date" placeholder="截止日期"/><span class="icon-place"></span></div></div>
-				<div class="submit"><input id="extend_button" onclick="alert('提交成功');" type="submit" value="Extend"/></div></form>
+					<div class="element-date"><label class="title"></label><div class="item-cont"><input id="end_date_2" class="large" data-format="yyyy-mm-dd" type="date" name="date" placeholder="截止日期"/><span class="icon-place"></span></div></div>
+				<div class="submit"><input id="extend_button" onclick="alert('提交成功');" type="button" value="Extend"/></div></form>
 				<!-- Stop Formoid form-->
 				
 				
@@ -160,9 +160,11 @@
 				<link rel="stylesheet" href="cancel_files/formoid1/formoid-solid-blue.css" type="text/css" />
 				<script type="text/javascript" src="cancel_files/formoid1/jquery.min.js"></script>
 				<form class="formoid-solid-blue" style="background-color:#FFFFFF;font-size:14px;font-family:'Roboto',Arial,Helvetica,sans-serif;color:#34495E;max-width:480px;min-width:150px" method="post"><div class="title"><h2>注销旧卡</h2></div>
-					<div class="element-checkbox"><label class="title">选项</label>		<div class="column column1"><label><input type="checkbox" name="checkbox[]" value="注销"/ ><span>注销</span></label><label><input type="checkbox" name="checkbox[]" value="删除卡内信息"/ ><span>删除卡内信息</span></label><label><input type="checkbox" name="checkbox[]" value="删除服务器信息"/ ><span>删除服务器信息</span></label></div><span class="clearfix"></span>
+					<div class="element-checkbox"><label class="title">选项</label>		<div class="column column1">
+            <label><input type="checkbox" name="checkbox1" value="删除卡内信息"/ ><span>删除卡内信息</span></label>
+            <label><input type="checkbox" name="checkbox2" value="删除服务器信息"/ ><span>删除服务器信息</span></label></div><span class="clearfix"></span>
 				</div>
-				<div class="submit"><input id="clear_button" onclick="alert('提交成功');" type="submit" value="Confirm"/></div></form>
+				<div class="submit"><input id="clear_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></form>
 				<!-- Stop Formoid form-->
           </div>
         </div>
