@@ -137,3 +137,24 @@ def chargemoney(request):
     else:
         response = 'F'
     return HttpResponse("<p>" + response + "</p>")
+
+def consumemoney(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'idnumber' in info_dict and 'charge' in info_dict:
+        this_user = getuser(int(info_dict['idnumber']))
+        if this_user == None:
+            response = 'F'
+        else:
+            new_money = this_user.money - int(info_dict['charge'])
+            if new_money < 0:
+                response = 'F'
+                print('没钱了！！！')
+            else:
+                this_user.money = new_money
+                this_user.save()
+                response = 'Success'
+    else:
+        response = 'F'
+    return HttpResponse("<p>" + response + "</p>")

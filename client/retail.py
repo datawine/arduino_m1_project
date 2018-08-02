@@ -117,7 +117,7 @@ def parse_record(num):
         ty = int(array[15], 16)
         uni_name = b''
         for i in range(7, 15):
-            uni_name += int(array[i], 16).to_bytes(1, 'big')        
+            uni_name += int(array[i], 16).to_bytes(1, 'big')       
         uni_name = decode_utf8(uni_name)
         t = ""
         t_month = str(int(array[3], 16)).zfill(2)

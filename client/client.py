@@ -187,6 +187,23 @@ def charge_money(site_name):
         print('充值失败！信息错误！！')
     return True
 
+def consume_money(site_name):
+    number = int(input("How much: "))
+    flag = False
+    try:
+        flag = consume_in_client(number, site_name)
+    except:
+        flag = False
+    else:
+        pass
+    if flag == SUCCESS:
+        print('消费成功！')
+    elif flag == FAILED:
+        print('消费失败！')
+    elif flag == CONSTRUCTIONERROR:
+        print('消费失败！信息错误！！')
+    return True
+
 if __name__ == '__main__':
     #test_create()
     #test_get()
@@ -205,6 +222,7 @@ if __name__ == '__main__':
         print('9.query')
         print('10.get money record from server')
         print('11.charge money')
+        print('12.consume money')
         choice = int(input("Choice: "))
         if choice == 0:
             print('Bye bye')
@@ -241,5 +259,8 @@ if __name__ == '__main__':
         elif choice == 11:
             print('充钱！！！')
             charge_money(my_site_name)
+        elif choice == 12:
+            print('花钱！！！')
+            consume_money(my_site_name)
         else:
             break
