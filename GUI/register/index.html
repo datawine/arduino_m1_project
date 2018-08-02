@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="skeleton-tabs.css">
   
 </head>
-<body class="blurBg-false" style="background-color:#EBEBEB">
+<body class="blurBg-false">
 <link rel="stylesheet" href="formoid_files/formoid1/formoid-solid-blue.css" type="text/css" />
 <script type="text/javascript" src="formoid_files/formoid1/jquery.min.js"></script>
 
   <div class="container">
     <div class="row">
-      <div class="twelve columns" style="margin-top: 10%">
+      <div class="twelve columns" style="margin-top: 5%">
         <ul class="tab-nav">
           <li>
             <a class="button active" href="#one">注册新卡</a>
@@ -32,16 +32,16 @@
           <div class="tab-pane active" id="one">
 		  
 				<form class="formoid-solid-blue" style="background-color:#FFFFFF;font-size:14px;font-family:'Roboto',Arial,Helvetica,sans-serif;color:#34495E;max-width:480px;min-width:150px" method="post"><div class="title"><h2>注册新卡</h2></div>
-					<div class="element-input"><label class="title"></label><div class="item-cont"><input class="large" type="text" name="input" placeholder="姓名"/><span class="icon-place"></span></div></div>
-					<div class="element-input"><label class="title"></label><div class="item-cont"><input class="large" type="text" name="input1" placeholder="学号"/><span class="icon-place"></span></div></div>
-					<div class="element-radio"><label class="title">性别</label>		<div class="column column2"><label><input type="radio" name="radio" value="男" /><span>男</span></label></div><span class="clearfix"></span>
+					<div class="element-input"><label class="title"></label><div class="item-cont"><input id="input" class="large" type="text" name="input" placeholder="姓名"/><span class="icon-place"></span></div></div>
+					<div class="element-input"><label class="title"></label><div class="item-cont"><input id="input1" class="large" type="text" name="input1" placeholder="学号"/><span class="icon-place"></span></div></div>
+					<div class="element-radio"><label class="title">性别</label>		<div class="column column2"><label><input id="radio" type="radio" name="radio" value="男" /><span>男</span></label></div><span class="clearfix"></span>
 						<div class="column column2"><label><input type="radio" name="radio" value="女" /><span>女</span></label></div><span class="clearfix"></span>
 				</div>
-					<div class="element-radio"><label class="title">类别</label>		<div class="column column3"><label><input type="radio" name="radio1" value="本科" /><span>本科</span></label></div><span class="clearfix"></span>
+					<div class="element-radio"><label class="title">类别</label>		<div class="column column3"><label><input id="radio1" type="radio" name="radio1" value="本科" /><span>本科</span></label></div><span class="clearfix"></span>
 						<div class="column column3"><label><input type="radio" name="radio1" value="硕士" /><span>硕士</span></label></div><span class="clearfix"></span>
 						<div class="column column3"><label><input type="radio" name="radio1" value="博士" /><span>博士</span></label></div><span class="clearfix"></span>
 				</div>            
-					<div class="element-select"><label class="title"></label><div class="item-cont"><div class="large"><span><select name="select" >
+					<div class="element-select"><label class="title"></label><div class="item-cont"><div class="large"><span><select id="select" name="select" >
 
 						<option value="建筑学">建筑学</option>
 						<option value="城乡规划">城乡规划</option>
@@ -133,10 +133,10 @@
 						<option value="生物医学工程">生物医学工程</option>
 						<option value="药学">药学</option></select><i></i><span class="icon-place"></span></span></div></div></div>
 					<div class="element-separator"><hr><h3 class="section-break-title">有效日期</h3></div>
-					<div class="element-date"><label class="title"></label><div class="item-cont"><input class="large" data-format="yyyy-mm-dd" type="date" name="date" placeholder="开始时间"/><span class="icon-place"></span></div></div>
-					<div class="element-date"><label class="title"></label><div class="item-cont"><input class="large" data-format="yyyy-mm-dd" type="date" name="date1" placeholder="截止时间"/><span class="icon-place"></span></div></div>
+					<div class="element-date"><label class="title"></label><div class="item-cont"><input id="date" class="large" data-format="yyyy-mm-dd" type="date" name="date" placeholder="开始时间"/><span class="icon-place"></span></div></div>
+					<div class="element-date"><label class="title"></label><div class="item-cont"><input id="date1" class="large" data-format="yyyy-mm-dd" type="date" name="date1" placeholder="截止时间"/><span class="icon-place"></span></div></div>
 					
-				<div class="submit"><input type="submit" value="Create"/></div></form><p class="frmd"><a href="http://formoid.com/v29.php">contact form html</a> Formoid.com 2.9</p><script type="text/javascript" src="formoid_files/formoid1/formoid-solid-blue.js"></script>
+				<div class="submit"><input id="create_button" onclick="alert('提交成功');" type="submit" value="Create"/></div></form>
 				<!-- Stop Formoid form-->			
 			
           </div>
@@ -148,7 +148,7 @@
 				<form class="formoid-solid-blue" style="background-color:#FFFFFF;font-size:14px;font-family:'Roboto',Arial,Helvetica,sans-serif;color:#34495E;max-width:480px;min-width:150px" method="post"><div class="title"><h2>延长有效期</h2></div>
 					<div class="element-separator"><hr><h3 class="section-break-title">延长到</h3></div>
 					<div class="element-date"><label class="title"></label><div class="item-cont"><input class="large" data-format="yyyy-mm-dd" type="date" name="date" placeholder="截止日期"/><span class="icon-place"></span></div></div>
-				<div class="submit"><input type="submit" value="Extend"/></div></form><p class="frmd"><a href="http://formoid.com/v29.php">contact form html</a> Formoid.com 2.9</p><script type="text/javascript" src="extend_files/formoid1/formoid-solid-blue.js"></script>
+				<div class="submit"><input id="extend_button" onclick="alert('提交成功');" type="submit" value="Extend"/></div></form>
 				<!-- Stop Formoid form-->
 				
 				
@@ -160,7 +160,7 @@
 				<form class="formoid-solid-blue" style="background-color:#FFFFFF;font-size:14px;font-family:'Roboto',Arial,Helvetica,sans-serif;color:#34495E;max-width:480px;min-width:150px" method="post"><div class="title"><h2>注销旧卡</h2></div>
 					<div class="element-checkbox"><label class="title">选项</label>		<div class="column column1"><label><input type="checkbox" name="checkbox[]" value="注销"/ ><span>注销</span></label><label><input type="checkbox" name="checkbox[]" value="删除卡内信息"/ ><span>删除卡内信息</span></label><label><input type="checkbox" name="checkbox[]" value="删除服务器信息"/ ><span>删除服务器信息</span></label></div><span class="clearfix"></span>
 				</div>
-				<div class="submit"><input type="submit" value="Confirm"/></div></form><p class="frmd"><a href="http://formoid.com/v29.php">contact form html</a> Formoid.com 2.9</p><script type="text/javascript" src="cancel_files/formoid1/formoid-solid-blue.js"></script>
+				<div class="submit"><input id="clear_button" onclick="alert('提交成功');" type="submit" value="Confirm"/></div></form>
 				<!-- Stop Formoid form-->
           </div>
         </div>

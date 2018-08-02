@@ -11,29 +11,34 @@ client.invoke("echo", "server ready", (error, res) => {
   }
 })
 
-let formula = document.querySelector('#formula')
+/*
 let name = document.querySelector('#name')
-let sex = document.querySelector('#sex')
-let ty = document.querySelector('#ty')
-let department = document.querySelector('#department')
-let ID = document.querySelector('#ID')
+var sex = document.getElementsByName("sex");
+
+// let ty = document.querySelector('#ty')
+let department = document.querySelector('#dep')
+let ID = document.querySelector('#id')
 let start_date = document.querySelector('#start_date')
 let end_date = document.querySelector('#end_date')
-
-let submit_button = document.querySelector('#submit_button')
-
-let result = document.querySelector('#result')
-
+*/
+let submit_button = document.querySelector('#create_button')
 
 submit_button.addEventListener('click', () => {
-  client.invoke("create_card", name.value, sex.value, ty.value, department.value, ID.value, start_date.value, end_date.value, (error, res) => {
-    if(error) {
-      console.error(error)
+  /*
+  var sex_val = "0";
+  for (i = 0; i < sex.length; i ++) {
+    if (sex[i].checked) {
+      sex_val = i.toString();
+    }
+  }
+  alert(sex.length);
+  */
+  client.invoke("create_card", "1", "?", "3", "2", "3", "4", "5", (error, res) => {
+//  client.invoke("create_card", name.value, "?", "3", department.value, ID.value, start_date.value, end_date.value, (error, res) => {
+      if(error) {
+//      console.error(error)
     } else {
-      result.textContent = res
     }
   })
 })
-submit_button.dispatchEvent(new Event('click'))
 //formula.dispatchEvent(new Event('input'))
-
