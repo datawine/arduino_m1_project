@@ -39,11 +39,11 @@
 						<div class="column column2"><label><input type="radio" name="sex" value="女" /><span>女</span></label></div><span class="clearfix"></span>
 				</div>
           <div class="element-radio"><label class="title">类别</label>		
-            <div class="column column3"><label><input type="radio" name="radio1" value="本科" /><span>本科</span></label></div><span class="clearfix"></span>
-						<div class="column column3"><label><input type="radio" name="radio1" value="硕士" /><span>硕士</span></label></div><span class="clearfix"></span>
-						<div class="column column3"><label><input type="radio" name="radio1" value="博士" /><span>博士</span></label></div><span class="clearfix"></span>
+            <div class="column column3"><label><input type="radio" name="ty" value="本科" /><span>本科</span></label></div><span class="clearfix"></span>
+						<div class="column column3"><label><input type="radio" name="ty" value="硕士" /><span>硕士</span></label></div><span class="clearfix"></span>
+						<div class="column column3"><label><input type="radio" name="ty" value="博士" /><span>博士</span></label></div><span class="clearfix"></span>
 				</div>            
-					<div class="element-select"><label class="title"></label><div class="item-cont"><div class="large"><span><select id="dep" name="dep" >
+					<div class="element-select"><label class="title"></label><div class="item-cont"><div class="large"><span><select id="dep" name="select" >
 
 						<option value="建筑学">建筑学</option>
 						<option value="城乡规划">城乡规划</option>
@@ -138,7 +138,7 @@
 					<div class="element-date"><label class="title"></label><div class="item-cont"><input id="start_date" class="large" data-format="yyyy-mm-dd" type="date" name="date" placeholder="开始时间"/><span class="icon-place"></span></div></div>
 					<div class="element-date"><label class="title"></label><div class="item-cont"><input id="end_date" class="large" data-format="yyyy-mm-dd" type="date" name="date1" placeholder="截止时间"/><span class="icon-place"></span></div></div>
 					
-				<div class="submit"><input id="create_button" type="submit" value="Create"/></div></form>
+				<div class="submit"><input id="create_button" onclick="alert('提交成功');" type="button" value="Create"/></div></form>
 				<!-- Stop Formoid form-->			
 			
           </div>
@@ -175,6 +175,5 @@
 <script>
   require('./renderer.js')
 </script>
-
 
 </html>
