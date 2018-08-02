@@ -126,7 +126,91 @@ class CreateSystem(object):
         elif flag == FAILED:
             return '删除失败！' 
         elif flag == CONSTRUCTIONERROR:
-            return '删除失败！信息错误！！' 
+            return '删除失败！信息错误！！'
+
+    def query_money(self):
+        while (True):
+            line = ser.readline()
+            print(line)
+            if len(line) != 0:
+                print("checking!")
+                try:
+                    print('查询成功！')
+                    return_str = query_money()
+                    return return_str
+                except:
+                    operate_end(ser)
+                    return '?????'
+                else:
+                    pass
+        return '?????'
+
+    def charge_money(self, number, site_name='注册中心'):
+        flag = False
+        try:
+            flag = charge_in_client(int(number), site_name)
+        except:
+            return '充值失败！发生错误！！'
+        else:
+            pass
+        print(flag)
+        if flag == SUCCESS:
+            return '充值成功！' 
+        elif flag == FAILED:
+            return '充值失败！' 
+        elif flag == CONSTRUCTIONERROR:
+            return '充值失败！信息错误！！'
+
+    def consume_money(self, number, site_name="小卖部"):
+        flag = False
+        try:
+            flag = consume_in_client(number, site_name)
+        except:
+            return '消费失败！发生错误！！' 
+        else:
+            pass
+        if flag == SUCCESS:
+            return '消费成功！' 
+        elif flag == FAILED:
+            return '消费失败！' 
+        elif flag == CONSTRUCTIONERROR:
+            return '消费失败！信息错误！！' 
+
+    def query_money_num(self):
+        while (True):
+            line = ser.readline()
+            print(line)
+            if len(line) != 0:
+                print("checking!")
+                try:
+                    print('查询成功！')
+                    return_str = query_record_num()
+                    print(return_str)
+                    return return_str
+                except:
+                    operate_end(ser)
+                    return '???????'
+                else:
+                    pass
+        return '?????'
+
+    def query_money_record(self):
+        while (True):
+            line = ser.readline()
+            print(line)
+            if len(line) != 0:
+                print("checking!")
+                try:
+                    print('查询成功！')
+                    return_str = query_record_time()
+                    print(return_str)
+                    return return_str
+                except:
+                    operate_end(ser)
+                    return '???????'
+                else:
+                    pass
+        return '?????'
 
     def echo(self, text):
         return text

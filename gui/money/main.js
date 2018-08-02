@@ -55,7 +55,7 @@ let pyPort = null
 
 const createPyProc = () => {
   let port = '4242'
-  let script = path.join(__dirname, '../../register', 'create.py')
+  let script = path.join(__dirname, '../../clieny', 'check.py')
   pyProc = require('child_process').spawn('python3', [script, port])
   if (pyProc != null) {
     console.log('child process success')

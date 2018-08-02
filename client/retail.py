@@ -36,6 +36,46 @@ def query():
 
     operate_end(ser)
 
+def query_money():
+    s, n = read_money_info()
+    operate_end(ser)
+    money_len = len(str(s))
+    money_int = str(s)[0:-2]
+    money_flo = str(s)[(money_len-2):]
+    return_str = money_int + '.' + money_flo
+    return str(return_str)
+
+def query_record_time():
+    s, n = read_money_info()
+    parse_record(n)
+    return_str = ''
+    for i in range(n):
+        if record[i][3] == 0:
+            orders = 'chuisimaoyu'
+        elif record[i][3] == 1:
+            this_str = str(record[i][1]) + "|"
+            return_str += this_str
+
+    operate_end(ser)
+    return return_str
+
+def query_record_num():
+    s, n = read_money_info()
+    parse_record(n)
+    return_str = ''
+    for i in range(n):
+        if record[i][3] == 0:
+            orders = 'mobaomaoyu'
+        elif record[i][3] == 1:
+            money_len = len(str(record[i][0]))
+            money_int = str(record[i][0])[0:-2]
+            money_flo = str(record[i][0])[(money_len-2):]
+            this_str = money_int + '.' + money_flo + "|"
+            return_str += this_str
+
+    operate_end(ser)
+    return return_str
+
 def charge(s, site_name):
     tmps, tmpn = read_money_info()
     if tmps + s >= 1000000:
