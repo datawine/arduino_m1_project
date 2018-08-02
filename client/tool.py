@@ -26,7 +26,7 @@ def write_block_raw(ser, dataBlock, blockIndex):
     if(blockIndex < 10):
         blockIndex = "0"+str(blockIndex)
     ser.write(change_to_byte("w ", str(blockIndex), dataBlock))
-    time.sleep(0.8)
+    time.sleep(1)
     line = ser.read(ser.in_waiting)
     print (line[:-1])
     print ("-------")
@@ -37,7 +37,7 @@ def read_block_raw(ser, blockIndex):
 
     command = "r "+str(blockIndex)
     ser.write(command.encode('ascii'))
-    time.sleep(0.8)
+    time.sleep(0.4)
     line = ser.read(ser.in_waiting)[:-1].decode('ascii')
     m = re.findall(" ([\dA-F]{2})"*16, line)
     if(len(m) == 0):
@@ -101,6 +101,9 @@ def decode_utf8(ret):
             flag = i
             break
         i += 2
+        if i >= len(retlist):
+            flag = i
+            break
     flag /= 2
     ans = ''
     while flag > 0:

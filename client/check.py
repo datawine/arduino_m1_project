@@ -3,6 +3,7 @@ import sys
 import requests
 import datetime
 import json
+import traceback
 from tool import *
 from create import *
 from retail import *
@@ -81,6 +82,7 @@ def create_new_member(name, sex, ty, department, ID, start_date, end_date):
     if req == 'Success!':
         while (True):
             line = ser.readline()
+            print(line)
             if len(line) != 0:
                 print("Writing!")
                 try:
@@ -99,6 +101,7 @@ def create_new_member(name, sex, ty, department, ID, start_date, end_date):
 def clear_card_info():
     while (True):
         line = ser.readline()
+        print(line)
         if len(line) != 0:
             print("Writing!")
             try:
@@ -135,6 +138,7 @@ def clear_user_info():
     if req == 'Success!':
         while (True):
             line = ser.readline()
+            print(line)
             if len(line) != 0:
                 print("Writing!")
                 try:
@@ -163,6 +167,7 @@ def renew_from_sql(idnumber):
     if flag_word == 'S':
         while (True):
             line = ser.readline()
+            print(line)
             if len(line) != 0:
                 print("Writing!")
                 try:
@@ -196,6 +201,7 @@ def refresh_end_date(idnumber, new_date):
         start_date = content
         while (True):
             line = ser.readline()
+            print(line)
             if len(line) != 0:
                 print("Writing!")
                 try:
@@ -212,7 +218,19 @@ def refresh_end_date(idnumber, new_date):
     return FAILED
 
 def check_money():
-    query()
+    while (True):
+        line = ser.readline()
+        print(line)
+        if len(line) != 0:
+            print("checking!")
+            try:
+                query()
+                break
+            except:
+                operate_end(ser)
+                print("put the card again")
+            else:
+                pass
     #这个后面应该需要做成一个可以返回东西
     return False 
 
@@ -243,15 +261,18 @@ def regain_money_from_sql():
 
     if flag_word == 'S':
         new_money = content
+        print(type(new_money))
+        print(new_money)
         while (True):
             line = ser.readline()
             if len(line) != 0:
                 print("Writing!")
                 try:
-                    write_in_money(int(new_money))
                     clear_record()
+                    charge(int(new_money), "注册中心")
                     break
-                except:
+                except Exception as e:
+                    print(str(e)+str(traceback.print_exc()))
                     operate_end(ser)
                     print("put the card again")
                 else:
@@ -293,6 +314,49 @@ def charge_in_client(number, site_name):
                     charge(number, site_name)
                     break
                 except Exception as e:
+                    print(str(e))
+                    operate_end(ser)
+                    print("put the card again")
+                else:
+                    pass
+        return SUCCESS
+    else:
+        return CONSTRUCTIONERROR
+    return FAILED
+
+def consume_in_client(number, site_name):
+    info_dict = {}
+    while (True):
+        line = ser.readline()
+        print(line)
+        if len(line) != 0:
+            print("checking!")
+            try:
+                info_dict = check()
+                break
+            except:
+                operate_end(ser)
+                print("put the card again")
+            else:
+                pass
+
+    url = 'http://' + SERVER + ':' + PORT + '/consumemoney'
+    data = {'idnumber':info_dict['idnumber'], 'charge':str(number)}
+    res=requests.get(url,params=data)
+    req = res.text
+    req = req[3:-4]
+    print(req)
+
+    if req == 'Success':
+        while (True):
+            line = ser.readline()
+            if len(line) != 0:
+                print("Writing!")
+                try:
+                    consume(number, site_name)
+                    break
+                except Exception as e:
+                    print(str(e))
                     operate_end(ser)
                     print("put the card again")
                 else:
