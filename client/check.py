@@ -82,6 +82,7 @@ def create_new_member(name, sex, ty, department, ID, start_date, end_date):
     if req == 'Success!':
         while (True):
             line = ser.readline()
+            print(line)
             if len(line) != 0:
                 print("Writing!")
                 try:
@@ -100,6 +101,7 @@ def create_new_member(name, sex, ty, department, ID, start_date, end_date):
 def clear_card_info():
     while (True):
         line = ser.readline()
+        print(line)
         if len(line) != 0:
             print("Writing!")
             try:
@@ -136,6 +138,7 @@ def clear_user_info():
     if req == 'Success!':
         while (True):
             line = ser.readline()
+            print(line)
             if len(line) != 0:
                 print("Writing!")
                 try:
@@ -164,6 +167,7 @@ def renew_from_sql(idnumber):
     if flag_word == 'S':
         while (True):
             line = ser.readline()
+            print(line)
             if len(line) != 0:
                 print("Writing!")
                 try:
@@ -197,6 +201,7 @@ def refresh_end_date(idnumber, new_date):
         start_date = content
         while (True):
             line = ser.readline()
+            print(line)
             if len(line) != 0:
                 print("Writing!")
                 try:
@@ -264,7 +269,7 @@ def regain_money_from_sql():
                 print("Writing!")
                 try:
                     clear_record()
-                    charge(int(new_money), "小卖部")
+                    charge(int(new_money), "注册中心")
                     break
                 except Exception as e:
                     print(str(e)+str(traceback.print_exc()))

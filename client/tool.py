@@ -101,6 +101,9 @@ def decode_utf8(ret):
             flag = i
             break
         i += 2
+        if i >= len(retlist):
+            flag = i
+            break
     flag /= 2
     ans = ''
     while flag > 0:
