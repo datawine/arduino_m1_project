@@ -46,17 +46,37 @@ def check_valid():
                 print("put the card again")
             else:
                 pass
-    url = 'http://' + SERVER + ':' + PORT + '/checkvalid'
-    data = {'idnumber':str(info_dict['idnumber']), 'validdate':info_dict['validdate']}
-    res=requests.get(url,params=data)
-    print(res.text)
-    req = res.text
-    req = req[3:-4]
-    if req == 'Good!':
-        return SUCCESS
+
+    try:
+        url = 'http://' + SERVER + ':' + PORT + '/checkvalid'
+        data = {'idnumber':str(info_dict['idnumber']), 'validdate':info_dict['validdate']}
+        res=requests.get(url,params=data)
+        print(res.text)
+        req = res.text
+        req = req[3:-4]
+        print('联网门禁！')
+        if req == 'Good!':
+            return SUCCESS
+        else:
+            return FAILED
+    except:
+        print('断网门禁！')
+        with open('./data.json', 'r') as f:
+            data = json.load(f)
+            idnumber = str(info_dict['idnumber'])
+            if idnumber in data:
+                validdate = data[idnumber]['validdate']
+                start_date = datetime.datetime.strptime(validdate[0:8], "%Y%m%d")
+                end_date = datetime.datetime.strptime(validdate[9:17], "%Y%m%d")
+                today = datetime.datetime.today()
+                if start_date <= today and end_date >= today:
+                    return SUCCESS
+                else:
+                    return FAILED
+            else:
+                return CONSTRUCTIONERROR
     else:
         return FAILED
-    return FAILED
 
 def create_new_member(name, sex, ty, department, ID, start_date, end_date):
     #需要对输入进行格式判定
@@ -380,3 +400,18 @@ def consume_in_client(number, site_name):
     else:
         return CONSTRUCTIONERROR
     return FAILED
+
+def get_info_from_sql(site_name):
+    url = 'http://' + SERVER + ':' + PORT + '/getallinfo'
+    data = {'clientname':site_name}
+    res=requests.get(url,params=data)
+    req = res.text
+    req = req[3:-4]
+    flag_word = req[0]
+    info_dict = json.loads(req[2:])
+    print(info_dict)
+    if flag_word == 'S':
+        with open('./data.json', 'w') as f:
+            json.dump(info_dict, f)
+        return True
+    return False
