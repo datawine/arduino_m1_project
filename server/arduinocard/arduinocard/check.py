@@ -28,7 +28,6 @@ def createcard(request):
     response = ''
     request.encoding='utf-8'
     info_dict = request.GET
-    print(info_dict)
     if 'name' in info_dict and 'sex' in info_dict and 'ty' in info_dict and 'department' in info_dict and 'ID' in info_dict and 'startdate' in info_dict and 'enddate' in info_dict:
         flag = False
         print('miaomiaomaiomao')
@@ -105,7 +104,6 @@ def regainmoney(request):
     request.encoding='utf-8'
     info_dict = request.GET
     if 'idnumber' in info_dict:
-        print('miaomiaomi')
         this_user = getuser(int(info_dict['idnumber']))
         if this_user == None:
             response = 'F'
@@ -121,7 +119,6 @@ def chargemoney(request):
     request.encoding='utf-8'
     info_dict = request.GET
     if 'idnumber' in info_dict and 'charge' in info_dict:
-        print('miaomiaomi')
         this_user = getuser(int(info_dict['idnumber']))
         if this_user == None:
             response = 'F'
@@ -134,6 +131,51 @@ def chargemoney(request):
                 this_user.money = new_money
                 this_user.save()
                 response = 'Success'
+    else:
+        response = 'F'
+    return HttpResponse("<p>" + response + "</p>")
+
+def consumemoney(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'idnumber' in info_dict and 'charge' in info_dict:
+        this_user = getuser(int(info_dict['idnumber']))
+        if this_user == None:
+            response = 'F'
+        else:
+            new_money = this_user.money - int(info_dict['charge'])
+            if new_money < 0:
+                response = 'F'
+                print('没钱了！！！')
+            else:
+                this_user.money = new_money
+                this_user.save()
+                response = 'Success'
+    else:
+        response = 'F'
+    return HttpResponse("<p>" + response + "</p>")
+
+def getallinfo(request):
+    response = ''
+    return_dict = {}
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'clientname' in info_dict:
+        user_list = getallusers()
+        if len(user_list) == 0:
+            response = 'F'
+        else:
+            for i in user_list:
+                return_dict[i.idnumber] = {}
+                return_dict[i.idnumber]['name'] = i.name
+                return_dict[i.idnumber]['department'] = i.department
+                return_dict[i.idnumber]['identifies'] = i.identifies
+                return_dict[i.idnumber]['sex'] = i.sex
+                return_dict[i.idnumber]['validdate'] = i.validdate
+                return_dict[i.idnumber]['money'] = i.money
+            string_to_send = json.dumps(return_dict)
+            response = 'S ' + string_to_send
     else:
         response = 'F'
     return HttpResponse("<p>" + response + "</p>")

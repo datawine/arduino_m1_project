@@ -29,4 +29,6 @@ urlpatterns = [
     url(r'^refreshcard$', check.refreshcard),
     url(r'^regainmoney$', check.regainmoney),
     url(r'^chargemoney$', check.chargemoney),
+    url(r'^consumemoney$', check.consumemoney),
+    url(r'^getallinfo$', check.getallinfo),
 ]

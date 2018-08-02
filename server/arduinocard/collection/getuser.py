@@ -26,4 +26,4 @@ def check_valid(user_ID, validdate):
             return False
 
 def getallusers():
-    return True
+    return Basic_info.objects.all()
