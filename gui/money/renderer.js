@@ -12,23 +12,38 @@ client.invoke("echo", "server ready", (error, res) => {
 })
 
 /*查询余额*/
-//没有输入, 只有输出
+//没有输入, 只有输出:
+let balance = document.querySelector('#balance')   //余额
+
 
 /*圈存*/
+//输入:
 let seller1 = document.querySelector('#seller1')
 let recharge = document.querySelector('#recharge')
 let recharge_button = document.querySelector('#recharge_button')
+//输出:
+//let balance = document.querySelector('#balance')   //余额, 和"查看余额"重复不用再声明
 
 /*消费*/
-let seller1 = document.querySelector('#seller2')
-let recharge = document.querySelector('#consume')
-let recharge_button = document.querySelector('#consume_button')
+//输入:
+let seller2 = document.querySelector('#seller2')
+let consume = document.querySelector('#consume')
+let consume_button = document.querySelector('#consume_button')
+//输出:
+//let balance = document.querySelector('#balance')   //余额
 
 /*消费记录*/
-//没有输入, 只有输出
-
-
-
+//没有输入, 只有输出:
+let date1 = document.querySelector('#date1')   //第一个消费日期
+let price1 = document.querySelector('#price1')   //第一个消费金额
+let date2 = document.querySelector('#date2')   //第二个消费日期
+let price2 = document.querySelector('#price2')   //第二个消费金额
+let date3 = document.querySelector('#date3')
+let price3 = document.querySelector('#price3')
+let date4 = document.querySelector('#date4')
+let price4 = document.querySelector('#price4')
+let date5 = document.querySelector('#date5')
+let price5 = document.querySelector('#price5')
 
 /*
 submit_button.addEventListener('click', () => {

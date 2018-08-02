@@ -113,7 +113,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<ol>
 <!--查询余额-->						
 <li><h4>卡内余额</h4>
-<h3>3.04 元</h3></li>
+<div id="balance"></div></li>
 
 
 						</ol>
@@ -169,7 +169,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--圈存-->						
 <li><a href ="javascript:return false;"><label class="radio"><i></i>圈存</label></a></li>
 <!-- Start Formoid form-->
-<li>卡内余额: 3.04元</li>
+<li>卡内余额: <div id="balance"></div></li>
 <div class="element-input"><label class="title"></label><div class="item-cont"><input id="seller1" class="large" type="text" name="input" placeholder="卖方"/><span class="icon-place"></span></div></div>
 <div class="element-input"><label class="title"></label><div class="item-cont"><input id="recharge" class="large" type="text" name="input" placeholder="输入金额"/><span class="icon-place"></span></div></div>
 <li><div class="submit"><input class="submit" id="recharge_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></li>
@@ -192,7 +192,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--消费-->						
 <li><a href ="javascript:return false;"><label class="radio"><i></i>消费</label></a></li>
 <!-- Start Formoid form-->
-<li>卡内余额: 3.04元</li>
+<li>卡内余额: <div id="balance"></div></li>
 <div class="element-input"><label class="title"></label><div class="item-cont"><input id="seller2" class="large" type="text" name="input" placeholder="卖方"/><span class="icon-place"></span></div></div>
 <div class="element-input"><label class="title"></label><div class="item-cont"><input id="consume" class="large" type="text" name="input" placeholder="输入金额"/><span class="icon-place"></span></div></div>
 <li><div class="submit"><input class="submit" id="consume_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></li>
@@ -224,12 +224,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <th>金额</th>
 </tr>
 <tr>
-<td>20151113</td>
-<td>3.21</td>
+<td><div id="date1"></div></td>
+<td><div id="price1"></div></td>
 </tr>
 <tr>
-<td>20171221</td>
-<td>12.10</td>
+<td><div id="date2"></div></td>
+<td><div id="price2"></div></td>
+</tr>
+<tr>
+<td><div id="date3"></div></td>
+<td><div id="price3"></div></td>
+</tr>
+<tr>
+<td><div id="date4"></div></td>
+<td><div id="price4"></div></td>
+</tr>
+<tr>
+<td><div id="date5"></div></td>
+<td><div id="price5"></div></td>
 </tr>
 </table>
 <!-- Stop Formoid form-->
