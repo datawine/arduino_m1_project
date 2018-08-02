@@ -19,27 +19,19 @@ ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
 
 def query():
     s, n = read_money_info()
-    money_len = len(str(s))
-    money_int = str(s)[0:-2]
-    money_float = str(s)[money_len-2:]
-    print("卡内余额: {}.{} 元".format(money_int, money_float))
+    print("卡内余额:", end = ' ')
+    print(s * 0.01)
 
     print("共{}条消费记录:".format(n))
     parse_record(n)
     for i in range(n):
         if record[i][3] == 0:
-            money_len = len(str(record[i][0]))
-            money_int = str(record[i][0])[0:-2]
-            money_float = str(record[i][0])[money_len-2:]
-            print("在 {} 于 {} 充值 {}.{} 元"\
-                .format(record[i][1], record[i][2], money_int, money_float), end = ' ')
+            print("在 {} 于 {} 充值 {} 元"\
+                .format(record[i][1], record[i][2], record[i][0] * 0.01), end = ' ')
             print()
         elif record[i][3] == 1:
-            money_len = len(str(record[i][0]))
-            money_int = str(record[i][0])[0:-2]
-            money_float = str(record[i][0])[money_len-2:]
-            print("在 {} 于 {} 消费 {}.{} 元"\
-                .format(record[i][1], record[i][2], money_int, money_float), end = ' ')
+            print("在 {} 于 {} 消费 {} 元"\
+                .format(record[i][1], record[i][2], record[i][0] * 0.01), end = ' ')
             print()
 
     operate_end(ser)
@@ -193,7 +185,7 @@ def write_in_money(num):
 
 def clear_record():
     emptyBlock = ['\x00' for i in range(16)]
-    for i in range(9, 15):
+    for i in range(8, 15):
         if( i % 4 != 3):           #跳过trailBlock
             write_block(ser, key, emptyBlock, i)
 
