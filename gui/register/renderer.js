@@ -25,8 +25,8 @@ let submit_button = document.querySelector('#create_button')
 let end_date2 = document.querySelector('#end_date_2');
 let extend_button = document.querySelector('#extend_button')
 
-var cb1 = document.getElementsByName("checkbox1");
-var cb2 = document.getElementsByName("checkbox2");
+var cb1 = document.getElementById("checkbox1");
+var cb2 = document.getElementById("checkbox2");
 let clear_button = document.querySelector('#clear_button')
 
 submit_button.addEventListener('click', () => {
