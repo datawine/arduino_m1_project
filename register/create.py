@@ -1,10 +1,9 @@
 #coding: utf-8
+import zerorpc
 import serial
 import time
 import sys
 from tool import *
-import zerorpc
-import traceback
 
 STARTBLOCK = 5
 ENDBLOCK = 13
@@ -16,17 +15,19 @@ BLOCK6 = ['\x00' for i in range(16)]
 
 key = "A"*16
 
-ser = serial.Serial("/dev/ttyS0", 9600, timeout=3.0)
+#ser = serial.Serial("/dev/cu.usbmodem1421", 9600, timeout=3.0)
+ser = serial.Serial("/dev/cu.usbmodem145131", 9600, timeout=3.0)
+#ser = serial.Serial("/dev/ttyS0", 9600, timeout=3.0)
 
 class CreateSystem(object):
     def create_card(self, name, sex, ty, department, ID, start_date, end_date):
-        global create, read_block
+#        global create, read_block
         try:
             #info = create(name, int(sex), int(ty), department, int(ID), start_date, end_date)
             info = "name: "+name+"sex: "+sex+"ty: "+ty+"department: "+department+"ID: "+ID+"start_date: "+start_date+"end_date: "+end_date
             return info
         except Exception as e:
-            return str(e)+str(traceback.print_exc())
+            return str(e)
     def echo(self, text):
         return text
 
@@ -48,7 +49,6 @@ def create(name, sex, ty, department, ID, start_date, end_date):
         write_block(ser, key, BLOCK4, 4)
         write_block(ser, key, BLOCK5, 5)
         write_block(ser, key, BLOCK6, 6)
-        #return "1231231"
         
         b4 = read_block(ser, key, 4)
         b5 = read_block(ser, key, 5)
@@ -60,6 +60,7 @@ def create(name, sex, ty, department, ID, start_date, end_date):
         info6 = check_info(b6, 6)
         return_dict = {**info5, **info6, **info4}
         print(return_dict)
+        operate_end(ser)
           
         return str(return_dict)
         
@@ -215,4 +216,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    operate_end(ser)
+
