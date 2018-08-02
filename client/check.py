@@ -32,6 +32,9 @@ def check():
 def check_valid():
     # idnumber = check_info(read_block(ser, key, 6), 6)['idnumber']
     # validdate = check_info(read_block(ser, key, 4), 4)['validdate']
+    with open('./valid.json', 'r') as v:
+        valid_dict = json.load(v)
+
     info_dict = {}
     while (True):
         line = ser.readline()
@@ -47,6 +50,13 @@ def check_valid():
             else:
                 pass
 
+    if not str(info_dict['idnumber']) in valid_dict:
+        print('miao')
+        return CONSTRUCTIONERROR
+    else:
+        if not valid_dict[str(info_dict['idnumber'])]:
+            return FAILED
+    print('???')
     try:
         url = 'http://' + SERVER + ':' + PORT + '/checkvalid'
         data = {'idnumber':str(info_dict['idnumber']), 'validdate':info_dict['validdate']}
@@ -410,8 +420,31 @@ def get_info_from_sql(site_name):
     flag_word = req[0]
     info_dict = json.loads(req[2:])
     print(info_dict)
+    valid_dict = {}
+    for i in info_dict:
+        valid_dict[i] = False
     if flag_word == 'S':
         with open('./data.json', 'w') as f:
             json.dump(info_dict, f)
+        with open('./valid.json', 'w') as v:
+            json.dump(valid_dict, v)
         return True
     return False
+
+def add_valid_user(id_list):
+    valid_dict = {}
+    with open('./valid.json', 'r') as v1:
+        valid_dict = json.load(v1)
+    with open('./data.json', 'r') as f:
+        data = json.load(f)
+
+    for ids in id_list:
+        if ids in data:
+            valid_dict[ids] = True
+        else:
+            return CONSTRUCTIONERROR
+
+    with open('./valid.json', 'w') as v2:
+        json.dump(valid_dict, v2)
+
+    return SUCCESS
