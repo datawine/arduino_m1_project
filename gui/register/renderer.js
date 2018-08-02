@@ -33,26 +33,28 @@ submit_button.addEventListener('click', () => {
   var sex_val;
   for (i = 0; i < sex.length; i ++) {
     if (sex[i].checked) {
-      sex_val = i.toString();
+      sex_val = (i+1).toString();
     }
   }
   var ty_val;
   for (i = 0; i < ty.length; i ++) {
     if (ty[i].checked) {
-      ty_val = i.toString();
+      ty_val = (i+1).toString();
     }
   }
-  client.invoke("create_card", name.value, sex_val, ty_val, department.value, ID.value, start_date.value, end_date.value, (error, res) => {
+  client.invoke("create_new", name.value, sex_val, ty_val, department.value, ID.value, start_date.value, end_date.value, (error, res) => {
       if(error) {
     } else {
+      alert(res);
     }
   })
 })
 
 extend_button.addEventListener('click', () => {
-  client.invoke("create_card", end_date2.value, (error, res) => {
+  client.invoke("refresh_card", end_date2.value, (error, res) => {
       if(error) {
     } else {
+      alert(res);
     }
   })
 })
@@ -60,12 +62,17 @@ extend_button.addEventListener('click', () => {
 clear_button.addEventListener('click', () => {
   var cb1_val, cb2_val;
   if (cb1.checked)
-    cb1_val = "?";
+    cb1_val = "1";
+  else
+    cb1_val = "2";
   if (cb2.checked)
-    cb2_val = "?";
-  client.invoke("create_card", cb1_val, cb2_val, (error, res) => {
+    cb2_val = "1";
+  else
+    cb2_val = "2";
+  client.invoke("clear_cards", cb1_val, cb2_val, (error, res) => {
       if(error) {
     } else {
+      alert(res);
     }
   })
 })

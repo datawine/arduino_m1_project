@@ -4,6 +4,7 @@ import requests
 import datetime
 import json
 import traceback
+import zerorpc
 from tool import *
 from create import *
 from retail import *
@@ -15,6 +16,62 @@ PORT = '8000' #端口号
 SUCCESS = 1
 FAILED = 0
 CONSTRUCTIONERROR = 2
+
+class CreateSystem(object):
+    def create_card(self, name, sex, ty, department, ID, start_date, end_date):
+#        global create, read_block
+        try:
+            #info = create(name, int(sex), int(ty), department, int(ID), start_date, end_date)
+            info = "name: "+name+"sex: "+sex+"ty: "+ty+"department: "+department+"ID: "+ID+"start_date: "+start_date+"end_date: "+end_date
+            with open("./test.txt", "w") as f:
+                f.write(info)
+            print(info)
+            return info
+        except Exception as e:
+            return str(e)
+    def create_new(self, name, sex, ty, department, ID, start_date, end_date):
+        if len(department) > 4:
+            department = department[0:4]
+        if len(name) > 6:
+            name = name[0:6]
+        start_date = start_date[0:4] + start_date[5:7] + start_date[8:10]
+        end_date = end_date[0:4] + end_date[5:7] + end_date[8:10]
+        flag = False
+        try:
+            flag = create_new_member(name, int(sex), int(ty), department, int(ID), start_date, end_date) 
+        except:
+            return '创建失败！发生错误！！'
+        else:
+            pass
+        if flag == SUCCESS:
+            return '创建成功！'
+        elif flag == FAILED:
+            return '创建失败！信息错误！！'
+        elif flag == CONSTRUCTIONERROR:
+            return '创建失败！格式错误！！'
+
+    def refresh_card(self, new_end_date):
+        new_end_date = new_end_date[0:4] + new_end_date[5:7] + new_end_date[8:10]
+        flag = False
+        try:
+            flag = refresh_end_date(new_end_date)
+        except:
+            return '注册失败！发生错误！！'
+        else:
+            pass
+        if flag == SUCCESS:
+            return '注册成功！'
+        elif flag == FAILED:
+            return '注册失败！'
+        elif flag == CONSTRUCTIONERROR:
+            return '注册失败！信息错误！！'
+        return True
+
+    def clear_cards(self, signal1, signal2):
+        return signal1+' '+signal2
+
+    def echo(self, text):
+        return text
 
 def check():
     b4 = read_block(ser, key, 4)
@@ -44,7 +101,8 @@ def check_valid():
             try:
                 info_dict = check()
                 break
-            except:
+            except Exception as e:
+                print(str(e)+str(traceback.print_exc()))
                 operate_end(ser)
                 print("put the card again")
             else:
@@ -90,6 +148,7 @@ def check_valid():
 
 def create_new_member(name, sex, ty, department, ID, start_date, end_date):
     #需要对输入进行格式判定
+    print(name, sex, ty, department, ID, start_date, end_date)
     if len(name) > 6:
         return CONSTRUCTIONERROR
     if not (sex == 1 or sex == 2 or sex == 3):
@@ -448,3 +507,21 @@ def add_valid_user(id_list):
         json.dump(valid_dict, v2)
 
     return SUCCESS
+
+def parse_port():
+    port = 4242
+    try:
+        port = int(sys.argv[1])
+    except Exception as e:
+        pass
+    return '{}'.format(port)
+
+def main():
+    addr = 'tcp://127.0.0.1:' + parse_port()
+    s = zerorpc.Server(CreateSystem())
+    s.bind(addr)
+    print('start running on {}'.format(addr))
+    s.run()
+
+if __name__ == '__main__':
+    main()
