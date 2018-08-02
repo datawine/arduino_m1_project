@@ -101,7 +101,7 @@ def decode_utf8(ret):
             flag = i
             break
         i += 2
-        if i >= len(retlist):
+        if i >= len(retlist) or i + 1 >= len(retlist):
             flag = i
             break
     flag /= 2
