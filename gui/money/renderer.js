@@ -11,24 +11,26 @@ client.invoke("echo", "server ready", (error, res) => {
   }
 })
 
+/*查询余额*/
+//没有输入, 只有输出
+
+/*圈存*/
+let seller1 = document.querySelector('#seller1')
+let recharge = document.querySelector('#recharge')
+let recharge_button = document.querySelector('#recharge_button')
+
+/*消费*/
+let seller1 = document.querySelector('#seller2')
+let recharge = document.querySelector('#consume')
+let recharge_button = document.querySelector('#consume_button')
+
+/*消费记录*/
+//没有输入, 只有输出
+
+
+
+
 /*
-let name = document.querySelector('#name')
-var sex = document.getElementsByName("sex");
-var ty = document.getElementsByName("ty");
-let department = document.querySelector('#dep')
-let ID = document.querySelector('#id')
-let start_date = document.querySelector('#start_date')
-let end_date = document.querySelector('#end_date')
-
-let submit_button = document.querySelector('#create_button')
-
-let end_date2 = document.querySelector('#end_date_2');
-let extend_button = document.querySelector('#extend_button')
-
-var cb1 = document.getElementsByName("checkbox1");
-var cb2 = document.getElementsByName("checkbox2");
-let clear_button = document.querySelector('#clear_button')
-
 submit_button.addEventListener('click', () => {
   var sex_val;
   for (i = 0; i < sex.length; i ++) {

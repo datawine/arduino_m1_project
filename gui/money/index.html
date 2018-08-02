@@ -10,12 +10,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!-- head -->
 <head>
 <title>Online Recharge a Corporate Category Bootstrap Responsive Web Template | index :: w3layouts</title>
-
-<script type='text/javascript' src='js/jquery-2.2.3.min.js'>
-	require('js/renderer.js')
-</script>
-
-
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" /><!-- bootstrap-CSS -->
 <link rel="stylesheet" href="css/bootstrap-select.css"><!-- bootstrap-select-CSS -->
 <link href="css/font-awesome.css" rel="stylesheet" type="text/css" media="all" /><!-- Fontawesome-CSS -->
@@ -37,6 +31,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- //head -->
 <!-- body -->
 <body >
+<script type="text/javascript" src="formoid_files/formoid1/jquery.min.js"></script>
 <!--header-->
 <header>
 	<div class="container">
@@ -114,11 +109,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			     <div class="tab-grids">
                     <div id="tab1" class="tab-grid">  
 		                      <div class="login-form">	
-						<form action="pay.html" method="post" id="signup">
-						<ol>			
-								
+						<form method="post" id="signup">
+						<ol>
+<!--查询余额-->						
 <li><h4>卡内余额</h4>
 <h3>3.04 元</h3></li>
+
+
 						</ol>
 						</form>															
 						</div>	
@@ -127,7 +124,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				
 				<div id="tab2" class="tab-grid">
 						  <div class="login-form">
-					<form action="pay.html" method="post" id="signup">
+					<form method="post" id="signup">
 						<ol>							
 							
 				        </ol>
@@ -159,54 +156,47 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             
                     
 			             </div>
-                        <!-- /tab1 -->
-			<!-- tab2 -->
+<!-- /tab1 -->
+<!-- tab2 -->
 						<div>
 							
 		                      <div class="login-form">
                                   <i class="icon fa fa-television inner-icon" aria-hidden="true"></i>
-						<form action="pay.html" method="post" id="signup">
+						<form method="post" id="signup">
                             
 						<ol>
 						
-						
-<li><a href ="javascript:return false;"><label class="radio"><i></i>圈存</label></a></li>						
+<!--圈存-->						
+<li><a href ="javascript:return false;"><label class="radio"><i></i>圈存</label></a></li>
+<!-- Start Formoid form-->
 <li>卡内余额: 3.04元</li>
-<li>
-  <input type="text" id="customer" value="输入金额" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter Customer ID';}" required="">	
-</li>
-
-<li>
-	<input type="submit" class="submit" value="Recharge Now" />
-</li>
-
+<div class="element-input"><label class="title"></label><div class="item-cont"><input id="seller1" class="large" type="text" name="input" placeholder="卖方"/><span class="icon-place"></span></div></div>
+<div class="element-input"><label class="title"></label><div class="item-cont"><input id="recharge" class="large" type="text" name="input" placeholder="输入金额"/><span class="icon-place"></span></div></div>
+<li><div class="submit"><input class="submit" id="recharge_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></li>
+<!-- Stop Formoid form-->
 
 				        </ol>
 						</form>	
 																							
 						</div>	
 						</div>
-                        <!-- /tab2 -->
-                        
-                        <!-- tab3 -->
+<!-- /tab2 -->
+<!-- tab3 -->
 				<div>
                     <i class="icon fa fa-credit-card inner-icon" aria-hidden="true"></i>
                     <div id="tab2" class="tab-grid">
 		                      <div class="login-form">
-						<form action="pay.html" method="post" id="signup">
-						<ol>				
+						<form method="post" id="signup">
+						<ol>
 
-						
-<li><a href ="javascript:return false;"><label class="radio"><i></i>消费</label></a></li>						
+<!--消费-->						
+<li><a href ="javascript:return false;"><label class="radio"><i></i>消费</label></a></li>
+<!-- Start Formoid form-->
 <li>卡内余额: 3.04元</li>
-<li>
-  <input type="text" id="customer" value="输入金额" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter Customer ID';}" required="">	
-</li>
-
-<li>
-	<input type="submit" class="submit" value="Consume Now" />
-</li>
-
+<div class="element-input"><label class="title"></label><div class="item-cont"><input id="seller2" class="large" type="text" name="input" placeholder="卖方"/><span class="icon-place"></span></div></div>
+<div class="element-input"><label class="title"></label><div class="item-cont"><input id="consume" class="large" type="text" name="input" placeholder="输入金额"/><span class="icon-place"></span></div></div>
+<li><div class="submit"><input class="submit" id="consume_button" onclick="alert('提交成功');" type="button" value="Confirm"/></div></li>
+<!-- Stop Formoid form-->
 
 				        </ol>
 						</form>	
@@ -216,32 +206,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     </div>
                     </div>
                         <!-- /tab3 -->
-                        
-                        
                         <!-- tab4 -->
                         <div>
                             <i class="icon fa fa-lightbulb-o inner-icon" aria-hidden="true"></i>
                     <div id="tab2" class="tab-grid">
 		                      <div class="login-form">
-						<form action="pay.html" method="post" id="signup">
+						<form method="post" id="signup">
 						<ol>
-						
-<li><a href ="javascript:return false;"><label class="radio"><i></i>消费记录</label></a></li>
-<table style="width:100%">
-  <tr>
-    <th>消费日期</th>
-    <th>金额</th>
-  </tr>
-  <tr>
-    <td>20151113</td>
-    <td>3.21</td>
-  </tr>
-  <tr>
-    <td>20171221</td>
-    <td>12.10</td>
-  </tr>
-</table>
 
+
+<!--消费记录-->						
+<li><a href ="javascript:return false;"><label class="radio"><i></i>消费记录</label></a></li>
+<!-- Start Formoid form-->
+<table style="width:100%">
+<tr>
+<th>消费日期</th>
+<th>金额</th>
+</tr>
+<tr>
+<td>20151113</td>
+<td>3.21</td>
+</tr>
+<tr>
+<td>20171221</td>
+<td>12.10</td>
+</tr>
+</table>
+<!-- Stop Formoid form-->
 				        </ol>
 						</form>	
 																							
