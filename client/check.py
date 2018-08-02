@@ -184,12 +184,27 @@ def renew_from_sql(idnumber):
         return CONSTRUCTIONERROR
     return FAILED
 
-def refresh_end_date(idnumber, new_date):
+def refresh_end_date(new_date):
     if not check_date_valid(new_date):
         return CONSTRUCTIONERROR
 
+    info_dict = {}
+    while (True):
+        line = ser.readline()
+        print(line)
+        if len(line) != 0:
+            print("checking!")
+            try:
+                info_dict = check()
+                break
+            except:
+                operate_end(ser)
+                print("put the card again")
+            else:
+                pass
+
     url = 'http://' + SERVER + ':' + PORT + '/refreshcard'
-    data = {'idnumber':str(idnumber), 'newdate':new_date}
+    data = {'idnumber':info_dict['idnumber'], 'newdate':new_date}
     res=requests.get(url,params=data)
     req = res.text
     req = req[3:-4]

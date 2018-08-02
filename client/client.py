@@ -127,11 +127,10 @@ def renew_card():
     return True
 
 def refresh_card():
-    ID = int(input("ID: "))
     new_end_date = input("new date: ")
     flag = False
     try:
-        flag = refresh_end_date(ID, new_end_date)
+        flag = refresh_end_date(new_end_date)
     except:
         flag = False
     else:
