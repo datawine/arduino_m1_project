@@ -2,10 +2,13 @@ from django.http import HttpResponse
 from django.db import models
 from django.shortcuts import render
 import datetime
+import json
 
 from collection.create import *
 from collection.readinfo import *
 from collection.tool import *
+from collection.getuser import *
+from collection.updateuser import *
 
 def checkvalid(request):
     response = ''
@@ -45,7 +48,7 @@ def createcard(request):
         response = 'Failed!'
     return HttpResponse("<p>" + response + "</p>")
 
-def cleancard(request):
+def clearcard(request):
     response = ''
     request.encoding='utf-8'
     info_dict = request.GET
@@ -57,4 +60,80 @@ def cleancard(request):
             response = 'Failed!'
     else:
         response = 'Failed!'
+    return HttpResponse("<p>" + response + "</p>")
+
+def renewcard(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'idnumber' in info_dict:
+        this_user = getuser(int(info_dict['idnumber']))
+        if this_user == None:
+            response = 'F'
+        else:
+            new_dict = {}
+            new_dict['name'] = this_user.name
+            new_dict['sex'] = this_user.sex
+            new_dict['identifies'] = this_user.identifies
+            new_dict['department'] = this_user.department
+            new_dict['idnumber'] = this_user.idnumber
+            new_dict['validdate'] = this_user.validdate
+            string_to_send = json.dumps(new_dict)
+            response = 'S ' + string_to_send
+    else:
+        response = 'F'
+    return HttpResponse("<p>" + response + "</p>")
+
+def refreshcard(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'newdate' in info_dict and 'idnumber' in info_dict:
+        flag = update_validdate(int(info_dict['idnumber']), info_dict['newdate'])
+        if flag:
+            this_user = getuser(int(info_dict['idnumber']))
+            old_start_date = this_user.validdate
+            response = 'S ' + old_start_date
+        else:
+            response = 'F'
+    else:
+        response = 'F'
+    return HttpResponse("<p>" + response + "</p>")
+
+def regainmoney(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'idnumber' in info_dict:
+        print('miaomiaomi')
+        this_user = getuser(int(info_dict['idnumber']))
+        if this_user == None:
+            response = 'F'
+        else:
+            user_money = this_user.money
+            response = 'S ' + str(user_money)
+    else:
+        response = 'F'
+    return HttpResponse("<p>" + response + "</p>")
+
+def chargemoney(request):
+    response = ''
+    request.encoding='utf-8'
+    info_dict = request.GET
+    if 'idnumber' in info_dict and 'charge' in info_dict:
+        print('miaomiaomi')
+        this_user = getuser(int(info_dict['idnumber']))
+        if this_user == None:
+            response = 'F'
+        else:
+            new_money = this_user.money + int(info_dict['charge'])
+            if new_money >= 1000000:
+                response = 'F'
+                print('冲太多了！！！')
+            else:
+                this_user.money = new_money
+                this_user.save()
+                response = 'Success'
+    else:
+        response = 'F'
     return HttpResponse("<p>" + response + "</p>")

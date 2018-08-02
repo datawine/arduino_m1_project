@@ -2,8 +2,10 @@ import time
 import sys
 import requests
 import datetime
+import json
 from tool import *
 from create import *
+from retail import *
 
 SERVER = '127.0.0.1' #主机IP  
 PORT = '8000' #端口号
@@ -94,6 +96,21 @@ def create_new_member(name, sex, ty, department, ID, start_date, end_date):
         return FAILED
     return FAILED
 
+def clear_card_info():
+    while (True):
+        line = ser.readline()
+        if len(line) != 0:
+            print("Writing!")
+            try:
+                clear(ser)
+                break
+            except:
+                operate_end(ser)
+                print("put the card again")
+            else:
+                pass
+    return SUCCESS
+
 def clear_user_info():
     info_dict = {}
     while (True):
@@ -109,7 +126,7 @@ def clear_user_info():
                 print("put the card again")
             else:
                 pass
-    url = 'http://' + SERVER + ':' + PORT + '/checkvalid'
+    url = 'http://' + SERVER + ':' + PORT + '/clearcard'
     data = {'idnumber':str(info_dict['idnumber'])}
     res=requests.get(url,params=data)
     req = res.text
@@ -133,18 +150,154 @@ def clear_user_info():
         return FAILED
     return FAILED
 
-def clear_card_info():
+def renew_from_sql(idnumber):
+    url = 'http://' + SERVER + ':' + PORT + '/renewcard'
+    data = {'idnumber':str(idnumber)}
+    res=requests.get(url,params=data)
+    req = res.text
+    req = req[3:-4]
+    print(req)
+    flag_word = req[0]
+    info_dict = json.loads(req[2:])
+    print(info_dict)
+    if flag_word == 'S':
+        while (True):
+            line = ser.readline()
+            if len(line) != 0:
+                print("Writing!")
+                try:
+                    create(info_dict['name'], int(info_dict['sex']), int(info_dict['identifies']), info_dict['department'], 
+                            int(info_dict['idnumber']), info_dict['validdate'][0:8], info_dict['validdate'][9:])
+                    break
+                except:
+                    operate_end(ser)
+                    print("put the card again")
+                else:
+                    pass
+        return SUCCESS
+    else:
+        return CONSTRUCTIONERROR
+    return FAILED
+
+def refresh_end_date(idnumber, new_date):
+    if not check_date_valid(new_date):
+        return CONSTRUCTIONERROR
+
+    url = 'http://' + SERVER + ':' + PORT + '/refreshcard'
+    data = {'idnumber':str(idnumber), 'newdate':new_date}
+    res=requests.get(url,params=data)
+    req = res.text
+    req = req[3:-4]
+    print(req)
+    flag_word = req[0]
+    content = req[2:10]
+
+    if flag_word == 'S':
+        start_date = content
+        while (True):
+            line = ser.readline()
+            if len(line) != 0:
+                print("Writing!")
+                try:
+                    refresh_valid(start_date, new_date)
+                    break
+                except:
+                    operate_end(ser)
+                    print("put the card again")
+                else:
+                    pass
+        return SUCCESS
+    else:
+        return CONSTRUCTIONERROR
+    return FAILED
+
+def check_money():
+    query()
+    #这个后面应该需要做成一个可以返回东西
+    return False 
+
+def regain_money_from_sql():
+    info_dict = {}
     while (True):
         line = ser.readline()
+        print(line)
         if len(line) != 0:
-            print("Writing!")
+            print("checking!")
             try:
-                clear(ser)
+                info_dict = check()
                 break
             except:
                 operate_end(ser)
                 print("put the card again")
             else:
                 pass
-    return True
-    return True
+
+    url = 'http://' + SERVER + ':' + PORT + '/regainmoney'
+    data = {'idnumber':info_dict['idnumber']}
+    res=requests.get(url,params=data)
+    req = res.text
+    req = req[3:-4]
+    print(req)
+    flag_word = req[0]
+    content = req[2:]
+
+    if flag_word == 'S':
+        new_money = content
+        while (True):
+            line = ser.readline()
+            if len(line) != 0:
+                print("Writing!")
+                try:
+                    write_in_money(int(new_money))
+                    clear_record()
+                    break
+                except:
+                    operate_end(ser)
+                    print("put the card again")
+                else:
+                    pass
+        return SUCCESS
+    else:
+        return CONSTRUCTIONERROR
+    return FAILED
+
+def charge_in_client(number, site_name):
+    info_dict = {}
+    while (True):
+        line = ser.readline()
+        print(line)
+        if len(line) != 0:
+            print("checking!")
+            try:
+                info_dict = check()
+                break
+            except:
+                operate_end(ser)
+                print("put the card again")
+            else:
+                pass
+
+    url = 'http://' + SERVER + ':' + PORT + '/chargemoney'
+    data = {'idnumber':info_dict['idnumber'], 'charge':str(number)}
+    res=requests.get(url,params=data)
+    req = res.text
+    req = req[3:-4]
+    print(req)
+
+    if req == 'Success':
+        while (True):
+            line = ser.readline()
+            if len(line) != 0:
+                print("Writing!")
+                try:
+                    charge(number, site_name)
+                    break
+                except Exception as e:
+                    operate_end(ser)
+                    print("put the card again")
+                else:
+                    pass
+        return SUCCESS
+    else:
+        return CONSTRUCTIONERROR
+    return FAILED

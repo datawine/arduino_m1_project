@@ -18,3 +18,14 @@ def delete_user(idnumber):
     else:
         this_user.delete()
         return True
+
+def update_validdate(idnumber, new_end_date):
+    this_user = getuser(idnumber)
+    if this_user == None:
+        return False
+    else:
+        old_start_date = this_user.validdate[0:8]
+        new_validdate = old_start_date + '-' + new_end_date
+        this_user.validdate = new_validdate
+        this_user.save()
+        return True

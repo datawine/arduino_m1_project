@@ -10,6 +10,7 @@ PORT = '8000' #端口号
 # BUFLEN = 1024 
 # USER_list = ['user01', 'user02']
 url = 'http://' + SERVER + ':' + PORT + '/testdb'
+my_site_name = ''
 
 def test_create():
     url = 'http://' + SERVER + ':' + PORT + '/testdb'
@@ -38,10 +39,15 @@ def test_post():
     print('good')
 
 def check_entrance():
-    while(True):
-        print('Hold on~')
-        if check_valid() == SUCCESS:
-            print('身份验证，请进！')
+    try:
+        while(True):
+            print('Hold on~')
+            if check_valid() == SUCCESS:
+                print('身份验证，请进！')
+    except:
+        print('出问题了！')
+    else:
+        pass
     return False
 
 def create_new():
@@ -52,7 +58,13 @@ def create_new():
     ID = int(input("ID: "))
     start_date = input("valid start date: ")
     end_date = input("valid end date: ")
-    flag = create_new_member(name, sex, ty, department, ID, start_date, end_date) 
+    flag = False
+    try:
+        flag = create_new_member(name, sex, ty, department, ID, start_date, end_date) 
+    except:
+        flag = False
+    else:
+        pass
     if flag == SUCCESS:
         print('创建成功！')
     elif flag == FAILED:
@@ -62,7 +74,13 @@ def create_new():
     return True
 
 def create_test():
-    flag = create_new_member('猫鱼', 1, 1, '计算机', 2015011251, "20150901", "20190730")
+    flag = False
+    try:
+        flag = create_new_member('猫鱼', 1, 1, '计算机', 2015011251, "20150901", "20190730")
+    except:
+        flag = False
+    else:
+        pass
     if flag == SUCCESS:
         print('创建成功！')
     elif flag == FAILED:
@@ -72,16 +90,107 @@ def create_test():
     return True
 
 def clear_card():
-    clear_user_info()
+    try:
+        clear_card_info()
+        print('清空成功！')
+    except:
+        print('出问题了！')
+    else:
+        pass
     return False
 
 def clear_info():
-    clear_card_info()
+    try:
+        clear_user_info()
+        print('开除成功！')
+    except:
+        print('出问题了！')
+    else:
+        pass
+    return True
+
+def renew_card():
+    ID = int(input("ID: "))
+    flag = False
+    try:
+        flag = renew_from_sql(ID)
+    except:
+        flag = False
+    else:
+        pass
+    if flag == SUCCESS:
+        print('获取成功！')
+    elif flag == FAILED:
+        print('获取失败！')
+    elif flag == CONSTRUCTIONERROR:
+        print('获取失败！信息错误！！')
+    return True
+
+def refresh_card():
+    ID = int(input("ID: "))
+    new_end_date = input("new date: ")
+    flag = False
+    try:
+        flag = refresh_end_date(ID, new_end_date)
+    except:
+        flag = False
+    else:
+        pass
+    if flag == SUCCESS:
+        print('注册成功！')
+    elif flag == FAILED:
+        print('注册失败！')
+    elif flag == CONSTRUCTIONERROR:
+        print('注册失败！信息错误！！')
+    return True
+
+def query_info():
+    try:
+        check_money()
+        print('查询成功！')
+    except:
+        print('出问题了！')
+    else:
+        pass
     return True
  
+def regain_money():
+    flag = False
+    try:
+        flag = regain_money_from_sql()
+    except:
+        flag = False
+    else:
+        pass
+    if flag == SUCCESS:
+        print('获取成功！且之前的交易记录已丢失！')
+    elif flag == FAILED:
+        print('获取失败！')
+    elif flag == CONSTRUCTIONERROR:
+        print('获取失败！信息错误！！')
+    return True
+
+def charge_money(site_name):
+    number = int(input("How much: "))
+    flag = False
+    try:
+        flag = charge_in_client(number, site_name)
+    except:
+        flag = False
+    else:
+        pass
+    if flag == SUCCESS:
+        print('充值成功！')
+    elif flag == FAILED:
+        print('充值失败！')
+    elif flag == CONSTRUCTIONERROR:
+        print('充值失败！信息错误！！')
+    return True
+
 if __name__ == '__main__':
     #test_create()
     #test_get()
+    my_site_name = '小卖部一'
     while(True):
         print('choose the mode:')
         print('0.exit')
@@ -91,6 +200,11 @@ if __name__ == '__main__':
         print('4.create test')
         print('5.clean card')
         print('6.clean info (delete the information in db)')
+        print('7.ask for info')
+        print('8.refresh the card')
+        print('9.query')
+        print('10.get money record from server')
+        print('11.charge money')
         choice = int(input("Choice: "))
         if choice == 0:
             print('Bye bye')
@@ -111,6 +225,21 @@ if __name__ == '__main__':
             clear_card()
         elif choice == 6:
             print('清除学籍信息！')
-            clear_card()
+            clear_info()
+        elif choice == 7:
+            print('获得卡片信息！')
+            renew_card()
+        elif choice == 8:
+            print('注册并延长有效期！')
+            refresh_card()
+        elif choice == 9:
+            print('查询卡内余额和交易记录！')
+            query_info()
+        elif choice == 10:
+            print('挂失获取余额！')
+            regain_money()
+        elif choice == 11:
+            print('充钱！！！')
+            charge_money(my_site_name)
         else:
             break

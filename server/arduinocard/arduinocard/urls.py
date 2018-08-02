@@ -24,5 +24,9 @@ urlpatterns = [
     url(r'^testmj$', testdb.testmj),
     url(r'^checkvalid$', check.checkvalid),
     url(r'^createcard$', check.createcard),
-    url(r'^cleancard$', check.cleancard),
+    url(r'^clearcard$', check.clearcard),
+    url(r'^renewcard$', check.renewcard),
+    url(r'^refreshcard$', check.refreshcard),
+    url(r'^regainmoney$', check.regainmoney),
+    url(r'^chargemoney$', check.chargemoney),
 ]

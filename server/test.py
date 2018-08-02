@@ -1,8 +1,13 @@
+import json
 
+info_dict = {'user':'maoyu','password':'chuimao'}
+print(info_dict)
 
-datestring = input("valid end date: ")
-year = int(datestring[0:4])
-month = int(datestring[4:6])
-day = int(datestring[6:8])
+teststr = json.dumps(info_dict)
+print(teststr)
 
-print(year, month, day)
+p = json.loads(teststr)
+
+print(p)
+print(p['user'])
+print(p['password'])
