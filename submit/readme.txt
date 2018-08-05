@@ -1,1 +1,10 @@
-说明其他各个文件、文件夹的内容是什么。
+文件夹内容：
+code文件夹：存放相关代码 
+code文件夹中包括：
+    access_control文件夹（门禁系统代码）、
+    client文件夹（服务器接口代码）、
+    gui文件夹（electron图形界面代码）、
+    project文件夹（前期调试用demo代码）、
+    register文件夹（注册中心代码）、
+    retailing文件夹（零售终端代码）、
+    server文件夹（服务器代码）
